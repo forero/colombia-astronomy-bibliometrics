@@ -87,7 +87,11 @@ genuinely different name spellings.
 
 ## Known limitations
 
-
+- **2027 is excluded from all analysis.** At the time of writing there is a
+  single in-press 2027 record (already assigned a bibcode) — too sparse a
+  bucket to be meaningful in year-based trends, and it would otherwise show
+  up as a one-off drop in every time series. `build_dataset.py` drops it
+  before writing `publications.csv`/`authorships.csv`.
 - **Institution matching is substring-based**, not a controlled ROR/GRID
   lookup, and Colombian secondary schools / non-academic institutions that
   happen to add "Colombia" to their affiliation string are counted the same
@@ -106,7 +110,7 @@ genuinely different name spellings.
 ## Outputs
 
 **Figures** (`output/figures/`):
-1. `fig1_publications_over_time.png` — cumulative and per-year publication counts
+1. `fig1_publications_over_time.png` — cumulative and per-year publication counts (log scale)
 2. `fig2_avg_authors_per_year.png` — mean/median authors per publication by year
 3. `fig3_authors_distribution.png` — log-log histogram of authorship size
 4. `fig4_top_institutions.png` — top 20 Colombian institutions by publication count
@@ -122,8 +126,8 @@ h-index per institution), `table2_top_authors`, `table3_journals`,
 `table4_top_cited` (top 10 most-cited articles) — all CSV + Markdown — plus
 `summary_stats.md`.
 
-As of the current data snapshot: 724 publications (1980–2027, including
-in-press/forthcoming items already assigned a bibcode), spanning 57 journals,
+As of the current data snapshot: 723 publications (1980–2026; the sole 2027
+in-press record is excluded, see Known limitations), spanning 56 journals,
 about 380 unique authors (after name matching) with a Colombian affiliation,
 26,550 total citations, and an overall h-index of 65. The most-cited paper is
 the 2017 multi-messenger neutron-star-merger discovery (GW170817), with 4,140

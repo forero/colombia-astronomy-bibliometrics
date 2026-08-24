@@ -90,6 +90,10 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame]:
         seen.add(pub.bibcode)
         unique_pubs.append(pub)
 
+    # 2027 has a single in-press record at the time of writing -- too sparse
+    # to be meaningful in year-based trends, so it's excluded throughout.
+    unique_pubs = [pub for pub in unique_pubs if pub.year != 2027]
+
     pub_rows = []
     author_rows = []
     for pub in unique_pubs:

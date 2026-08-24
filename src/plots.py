@@ -85,13 +85,15 @@ def fig_cumulative_and_annual(pubs: pd.DataFrame) -> None:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.5))
 
     ax1.plot(years, cumulative, marker="o", ms=3, color="#1f5aa6")
+    ax1.set_yscale("log")
     ax1.set_xlabel("Year")
-    ax1.set_ylabel("Cumulative publications")
+    ax1.set_ylabel("Cumulative publications (log scale)")
     ax1.set_title("Cumulative publication trajectory")
 
     ax2.bar(years, counts, color="#1f5aa6", width=0.8)
+    ax2.set_yscale("log")
     ax2.set_xlabel("Year")
-    ax2.set_ylabel("Publications")
+    ax2.set_ylabel("Publications (log scale)")
     ax2.set_title("Publications per year")
 
     fig.suptitle("Colombian-affiliated astronomy publications in ADS", y=1.02)
