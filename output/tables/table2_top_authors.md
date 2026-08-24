@@ -1,0 +1,29 @@
+# Top authors by publication count
+
+| Author | n_publications | first_year | last_year | primary_institution |
+| --- | --- | --- | --- | --- |
+| Forero-Romero, J. E. | 145 | 2013 | 2026 | Universidad de los Andes |
+| Brooks, D. | 136 | 2022 | 2026 |  |
+| Miquel, R. | 136 | 2022 | 2026 |  |
+| de la Macorra, A. | 135 | 2022 | 2026 |  |
+| Ahlen, S. | 134 | 2022 | 2026 |  |
+| Rossi, G. | 130 | 2023 | 2026 |  |
+| Tarlé, G. | 127 | 2023 | 2026 |  |
+| Sanchez, E. | 127 | 2023 | 2026 |  |
+| Claybaugh, T. | 126 | 2023 | 2026 |  |
+| Landriau, M. | 125 | 2022 | 2026 |  |
+| Aguilar, J. | 124 | 2022 | 2026 |  |
+| Weaver, B. A. | 119 | 2023 | 2026 |  |
+| Doel, P. | 117 | 2022 | 2026 |  |
+| Gaztañaga, E. | 112 | 2022 | 2026 |  |
+| Prada, F. | 110 | 2013 | 2026 |  |
+| Sprayberry, D. | 110 | 2024 | 2026 |  |
+| Schubnell, M. | 109 | 2023 | 2026 |  |
+| Meisner, A. | 109 | 2023 | 2026 |  |
+| Kremin, A. | 108 | 2022 | 2026 |  |
+| Le Guillou, L. | 107 | 2022 | 2026 |  |
+| Honscheid, K. | 104 | 2022 | 2026 |  |
+| Schlegel, D. | 103 | 2023 | 2026 |  |
+| Manera, M. | 102 | 2022 | 2026 |  |
+| Percival, W. J. | 97 | 2022 | 2026 |  |
+| Moustakas, J. | 97 | 2022 | 2026 |  |

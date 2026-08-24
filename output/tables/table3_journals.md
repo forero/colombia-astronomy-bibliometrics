@@ -1,0 +1,24 @@
+# Top journals
+
+| Journal | n_publications |
+| --- | --- |
+| Monthly Notices of the Royal Astronomical Society | 154 |
+| The Astrophysical Journal | 128 |
+| Journal of Cosmology and Astroparticle Physics | 114 |
+| Astronomy and Astrophysics | 55 |
+| The Astronomical Journal | 30 |
+| The Astrophysical Journal Letters | 28 |
+| General Relativity and Gravitation | 21 |
+| Advances in Space Research | 18 |
+| Revista Mexicana de Astronomia y Astrofisica | 17 |
+| Astrophysics and Space Science | 16 |
+| Publications of the Astronomical Society of the Pacific | 14 |
+| Solar Physics | 12 |
+| Universe | 10 |
+| The Astrophysical Journal Supplement Series | 9 |
+| Astronomische Nachrichten | 9 |
+| Physics of the Dark Universe | 9 |
+| Astronomy and Computing | 8 |
+| Planetary and Space Science | 7 |
+| New Astronomy | 6 |
+| Celestial Mechanics and Dynamical Astronomy | 3 |
