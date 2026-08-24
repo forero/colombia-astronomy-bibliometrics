@@ -15,7 +15,7 @@ under-merge someone who publishes under two different surname spellings.
 from __future__ import annotations
 
 import unicodedata
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 
 def _strip_accents(text: str) -> str:
@@ -75,8 +75,12 @@ def build_canonical_name_map(names: list[str]) -> dict[str, str]:
 
     Names are grouped by normalized surname, then unioned within each group
     when one's initials are a prefix of the other's. The canonical name for
-    a cluster is its member with the most fully spelled-out given name.
+    a cluster is its member with the most fully spelled-out given name,
+    breaking ties by which spelling occurs more often -- a rare metadata
+    typo ("Jamie E." for "Jaime E.") should not win just because it happens
+    to sort alphabetically after the correct spelling.
     """
+    frequency = Counter(names)
     unique_names = list(dict.fromkeys(names))
     parsed = {name: _split_name(name) for name in unique_names}
 
@@ -114,21 +118,24 @@ def build_canonical_name_map(names: list[str]) -> dict[str, str]:
 
     canonical_map: dict[str, str] = {}
     for members in clusters.values():
-        canonical = max(members, key=_completeness_key)
+        canonical = max(members, key=lambda n: _completeness_key(n, frequency))
         for name in members:
             canonical_map[name] = canonical
     return canonical_map
 
 
-def _completeness_key(name: str) -> tuple[int, int, str]:
-    """Sort key preferring the most fully spelled-out given name.
+def _completeness_key(name: str, frequency: Counter) -> tuple[int, int, int, str]:
+    """Sort key preferring the most fully spelled-out, most common given name.
 
     Ranks by how many full (non-initial) words the given name has -- not by
     raw string length, since a garbled ADS split like "Acevedo, D. D.
     Herrera" can be a longer string than the correct "Herrera Acevedo,
-    Daniel David" without being more complete.
+    Daniel David" without being more complete. Ties (same completeness) fall
+    back to whichever spelling is more common in the data, and only then to
+    alphabetical order, so a one-off typo doesn't win a tie against the
+    correct spelling just because it happens to sort later.
     """
     _, given = _split_name(name)
     words = given.replace("-", " ").replace(".", " ").split()
     full_word_count = sum(1 for w in words if len(w) > 1)
-    return (full_word_count, len(given), name)
+    return (full_word_count, len(given), frequency[name], name)
