@@ -217,7 +217,10 @@ def fig_top_institutions(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame
 
     fig, ax = plt.subplots(figsize=(8, 7))
     ax.barh(top.index[::-1], top.to_numpy()[::-1], color="#1f5aa6")
-    ax.set_xlabel("Publications")
+    # This ranking spans ~2 orders of magnitude (Uniandes vs. the smallest
+    # entrant), so a linear axis flattens everything below the top few bars.
+    ax.set_xscale("log")
+    ax.set_xlabel("Publications (log scale)")
     ax.set_title(f"Top {top_n} Colombian institutions by publication count")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig4_top_institutions.png", bbox_inches="tight")
