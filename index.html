@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The State of Colombian Astronomy</title>
+<meta name="description" content="A caveats-first bibliometric report on Colombian astronomy publications and citations from NASA ADS, 1980-2026, following Forero-Romero (2024).">
+<meta property="og:title" content="The State of Colombian Astronomy">
+<meta property="og:description" content="A caveats-first bibliometric report on Colombian astronomy publications and citations from NASA ADS, 1980-2026.">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%AD%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #efeee6;
+    --surface: #fbfaf6;
+    --ink: #1b2340;
+    --text: #2b2e38;
+    --text-muted: #5b5e6b;
+    --rule: #c9c4b3;
+    --rule-strong: #a49d84;
+    --accent: #a97a2f;
+    --accent-strong: #7c5219;
+    --caveat-bg: #f3e9d2;
+    --caveat-border: #a97a2f;
+    --fig-bg: #ffffff;
+    --fig-border: #d8d5c8;
+    --shadow: 0 1px 2px rgba(27, 35, 64, 0.06), 0 6px 20px rgba(27, 35, 64, 0.07);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1424;
+      --surface: #131b30;
+      --ink: #efeadd;
+      --text: #c7c9d4;
+      --text-muted: #8891a8;
+      --rule: #313c58;
+      --rule-strong: #46527a;
+      --accent: #d9a94f;
+      --accent-strong: #f0c579;
+      --caveat-bg: #1a2440;
+      --caveat-border: #d9a94f;
+      --fig-bg: #f4f2ea;
+      --fig-border: #d8d5c8;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0d1424;
+    --surface: #131b30;
+    --ink: #efeadd;
+    --text: #c7c9d4;
+    --text-muted: #8891a8;
+    --rule: #313c58;
+    --rule-strong: #46527a;
+    --accent: #d9a94f;
+    --accent-strong: #f0c579;
+    --caveat-bg: #1a2440;
+    --caveat-border: #d9a94f;
+    --fig-bg: #f4f2ea;
+    --fig-border: #d8d5c8;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Spectral", Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent); color: var(--fig-bg); }
+
+  a { color: var(--accent-strong); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  h1, h2, h3, .display {
+    font-family: "Fraunces", Georgia, serif;
+    color: var(--ink);
+    font-weight: 600;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .mono {
+    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(1.2px 1.2px at 8% 30%, var(--accent) 0, transparent 60%),
+      radial-gradient(1px 1px at 22% 70%, var(--accent) 0, transparent 60%),
+      radial-gradient(1.4px 1.4px at 38% 18%, var(--accent) 0, transparent 60%),
+      radial-gradient(1px 1px at 55% 55%, var(--accent) 0, transparent 60%),
+      radial-gradient(1.2px 1.2px at 68% 82%, var(--accent) 0, transparent 60%),
+      radial-gradient(1px 1px at 82% 24%, var(--accent) 0, transparent 60%),
+      radial-gradient(1.4px 1.4px at 92% 60%, var(--accent) 0, transparent 60%),
+      radial-gradient(1px 1px at 12% 88%, var(--accent) 0, transparent 60%),
+      radial-gradient(1px 1px at 48% 90%, var(--accent) 0, transparent 60%),
+      radial-gradient(1.2px 1.2px at 78% 8%, var(--accent) 0, transparent 60%);
+    background-repeat: no-repeat;
+    opacity: 1;
+  }
+
+  .masthead-bar {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .masthead-bar strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- title block ---------- */
+
+  .titleblock {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 40px;
+  }
+
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+    margin: 0 0 14px;
+  }
+
+  h1.title {
+    font-size: clamp(2.1rem, 5vw, 3.05rem);
+    line-height: 1.08;
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-family: "Spectral", serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+  }
+
+  .byline {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .byline .name { color: var(--ink); font-weight: 600; }
+
+  .byline-meta {
+    margin-top: 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  .byline-meta a { color: var(--text-muted); }
+  .byline-meta a:hover { color: var(--accent-strong); }
+
+  /* ---------- main column ---------- */
+
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 8px 24px 100px;
+  }
+
+  .lede {
+    font-size: 1.02rem;
+  }
+
+  /* caveats box */
+
+  .caveats {
+    background: var(--caveat-bg);
+    border: 1px solid var(--caveat-border);
+    border-left-width: 5px;
+    border-radius: 3px;
+    padding: 26px 28px 28px;
+    margin: 8px 0 44px;
+  }
+
+  .caveats h2 {
+    font-size: 1.32rem;
+    margin-bottom: 4px;
+  }
+
+  .caveats .caveats-eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .caveats p { margin: 14px 0 0; }
+  .caveats p:first-of-type { margin-top: 16px; }
+
+  .caveat-list {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .caveat-list li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .caveat-list .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--accent-strong);
+    font-weight: 600;
+  }
+
+  /* abstract */
+
+  .abstract {
+    margin: 0 0 52px;
+    padding-top: 4px;
+  }
+
+  .abstract .label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .abstract p {
+    font-size: 1rem;
+  }
+
+  /* sections */
+
+  section.chapter {
+    margin: 64px 0;
+    scroll-margin-top: 24px;
+  }
+
+  .chapter-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 12px;
+  }
+
+  .chapter-num {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    min-width: 1.6em;
+  }
+
+  .chapter-head h2 {
+    font-size: 1.55rem;
+  }
+
+  h3.sub {
+    font-size: 1.12rem;
+    color: var(--ink);
+    margin: 34px 0 12px;
+  }
+
+  p { margin: 16px 0; }
+  p.tight { margin: 8px 0 0; }
+
+  .lead-in { color: var(--text-muted); }
+
+  /* stat strip */
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 28px 0 36px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 16px 14px;
+  }
+
+  .stat .n {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    display: block;
+  }
+
+  .stat .lbl {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: block;
+    line-height: 1.4;
+  }
+
+  /* figures */
+
+  figure {
+    margin: 30px 0 8px;
+  }
+
+  .figure-card {
+    background: var(--fig-bg);
+    border: 1px solid var(--fig-border);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    padding: 14px 14px 10px;
+  }
+
+  .figure-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+
+  figcaption {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  figcaption strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .fig-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 620px) {
+    .fig-row { grid-template-columns: 1fr; }
+  }
+
+  /* tables */
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 26px 0;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 560px;
+    font-size: 14.5px;
+    background: var(--surface);
+  }
+
+  caption {
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 16px 0;
+  }
+
+  th, td {
+    padding: 9px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+
+  th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  td.num, th.num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; text-align: right; }
+  td.wrap, th.wrap { white-space: normal; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(169, 122, 47, 0.07); }
+
+  .row-lead td { color: var(--ink); font-weight: 500; }
+
+  /* footer / availability */
+
+  .availability {
+    margin-top: 72px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .availability dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 8px 20px;
+    margin: 18px 0 0;
+    font-size: 14.5px;
+  }
+
+  .availability dt {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 2px;
+  }
+
+  .availability dd { margin: 0; }
+
+  footer {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  footer .rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 0 0 24px;
+  }
+
+  code.bibcode {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85em;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+<div class="masthead">
+  <div class="masthead-bar">
+    <span><strong>ADS Bibliometrics</strong> &middot; Companion Note</span>
+    <span>Compiled 2026</span>
+  </div>
+</div>
+
+<div class="titleblock">
+  <p class="kicker">A companion note to Forero&#8209;Romero (2024)</p>
+  <h1 class="title">The State of Colombian Astronomy</h1>
+  <p class="subtitle">Publication and citation trends from NASA&rsquo;s Astrophysics Data System, 1980&ndash;2026</p>
+  <div class="byline">
+    <span class="name">Jaime E. Forero-Romero</span> &middot; Universidad de los Andes, Bogot&aacute;
+    <div class="byline-meta">
+      COMPILED PROGRAMMATICALLY FROM NASA ADS RECORDS<br>
+      REFERENCE &middot; Forero-Romero (2024), <a href="https://arxiv.org/abs/2403.02255" target="_blank" rel="noopener">arXiv:2403.02255</a><br>
+      DATA &amp; CODE &middot; <a href="https://github.com/forero/colombia-astronomy-bibliometrics" target="_blank" rel="noopener">github.com/forero/colombia-astronomy-bibliometrics</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="caveats" role="note" aria-label="Scope and caveats">
+    <span class="caveats-eyebrow">Read this before the numbers</span>
+    <h2>Scope &amp; Caveats</h2>
+    <p>This note updates the institutional and authorship trends reported in Forero&#8209;Romero (2024) using a fresh NASA ADS export, but it is a narrower instrument than that paper, built without Web of Science and without a controlled author registry. Five limitations bound every figure and table below.</p>
+    <ol class="caveat-list">
+      <li><span class="num">01</span><span>There is no author identifier (ORCID) in this export. Name variants &mdash; &ldquo;J. E.&rdquo; vs. &ldquo;Jaime E.&rdquo;, inconsistent compound-surname splits, occasional metadata typos &mdash; are merged by a conservative surname&#43;initials heuristic. It can still split or over-merge a handful of individuals.</span></li>
+      <li><span class="num">02</span><span>The largest collaboration papers &mdash; DESI, LIGO/Virgo/KAGRA, Pierre Auger &mdash; have author lists <strong style="color:inherit">truncated at 200</strong> by this ADS export template. Authorship-size and collaboration-rate figures undercount those papers, in some cases by an order of magnitude.</span></li>
+      <li><span class="num">03</span><span>Institution attribution is a substring match against free-text affiliation strings, not a controlled ROR/GRID lookup. About 3&#37; of Colombia-mentioning affiliations fall into an unclassified &ldquo;other&rdquo; bucket rather than a named institution.</span></li>
+      <li><span class="num">04</span><span>Citation counts are a single ADS snapshot, not a time series. &ldquo;Citations per year&rdquo; below is total citations divided by paper age &mdash; a proxy for impact, not an observed citation-rate curve.</span></li>
+      <li><span class="num">05</span><span>A single in-press 2027 record is excluded throughout as too sparse a bucket to interpret.</span></li>
+    </ol>
+    <p>None of this overturns the broad trend: Colombian-affiliated astronomy output has grown by roughly two orders of magnitude since 1980 under any reasonable set of choices. But single data points &mdash; and especially the smaller institutions, low publication counts, and any figure touching the mega-collaborations &mdash; should be read as descriptive, not precise.</p>
+  </div>
+
+  <div class="abstract">
+    <span class="label">Abstract</span>
+    <p class="lede">We compile 723 astronomy and astrophysics publications indexed in NASA&rsquo;s Astrophysics Data System with at least one Colombian-affiliated author, spanning 1980 through 2026. The record set spans 56 journals and, after heuristic name-matching, about 380 individual researchers across 33 identified institutions, together accounting for over 26,500 citations and an overall <em>h</em>-index of 65. We report growth trends, collaboration-size effects, citation patterns, institutional and author rankings, venue and topic distributions, and a co-authorship network, following the descriptive approach of Forero&#8209;Romero (2024) wherever the underlying data permit. Universidad de los Andes, Universidad de Antioquia, Universidad Nacional de Colombia, and Universidad Industrial de Santander remain the four largest contributors &mdash; consistent with the earlier study&rsquo;s central finding despite three additional years of data and a different source database.</p>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><span class="n tabular">723</span><span class="lbl">Publications, 1980&ndash;2026</span></div>
+    <div class="stat"><span class="n tabular">56</span><span class="lbl">Journals</span></div>
+    <div class="stat"><span class="n tabular">380</span><span class="lbl">Colombian-affiliated authors</span></div>
+    <div class="stat"><span class="n tabular">33</span><span class="lbl">Institutions identified</span></div>
+    <div class="stat"><span class="n tabular">26,550</span><span class="lbl">Total citations</span></div>
+    <div class="stat"><span class="n tabular">65</span><span class="lbl">Overall <em>h</em>-index</span></div>
+  </div>
+
+  <section class="chapter" id="data">
+    <div class="chapter-head">
+      <span class="chapter-num">1</span>
+      <h2>Data &amp; Methods</h2>
+    </div>
+    <p>Two ADS custom-format exports &mdash; one broad, one narrower &mdash; were concatenated and de-duplicated by bibcode into a single set of 723 unique records with no overlap between the two source queries. A second ADS export template, matched back onto the first by row position and verified by title comparison, supplied citation counts that the primary tagged format doesn&rsquo;t carry. Institutions were identified by matching each free-text affiliation string against a curated list of Colombian university names and their English ADS-normalized forms (e.g. &ldquo;National University of Colombia&rdquo; for Universidad Nacional); author names were consolidated by the surname&#43;initials heuristic described above. Full methodology, parser code, and both source exports are in the linked repository.</p>
+  </section>
+
+  <section class="chapter" id="growth">
+    <div class="chapter-head">
+      <span class="chapter-num">2</span>
+      <h2>Growth of Output</h2>
+    </div>
+    <p>Cumulative output has grown by close to two orders of magnitude since 1980, with the clearest acceleration from the early 2010s onward &mdash; consistent with the &ldquo;consolidation phase&rdquo; that Forero&#8209;Romero (2024) dates to 2010&ndash;2019. Both panels below use a log axis; on a linear scale, the first three decades compress into an indistinguishable line at the bottom of the plot.</p>
+    <figure>
+      <div class="figure-card"><img src="output/figures/fig1_publications_over_time.png" alt="Cumulative and per-year publication counts from 1980 to 2026, both on a log y-axis, showing roughly two orders of magnitude of growth with an inflection around 2010."></div>
+      <figcaption><strong>Fig. 1</strong> &mdash; Cumulative publication trajectory (left) and publications per year (right), log-scaled. The apparent dip in the final two years is most likely ADS indexing lag, not a genuine decline.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter" id="collaboration">
+    <div class="chapter-head">
+      <span class="chapter-num">3</span>
+      <h2>Collaboration Size</h2>
+    </div>
+    <p>Mean authorship per paper was flat and low &mdash; typically under ten &mdash; until 2016, when it jumps sharply. That shift traces almost entirely to a handful of Colombian groups joining large international collaborations: DESI, LIGO/Virgo/KAGRA, and the Pierre Auger Observatory. Caveat 02 applies directly here: because those collaborations&rsquo; author lists are truncated at 200 in this export, the true post-2016 mean is understated, not overstated.</p>
+    <div class="fig-row">
+      <figure>
+        <div class="figure-card"><img src="output/figures/fig2_avg_authors_per_year.png" alt="Mean and median authors per publication by year, flat and low before 2016 then rising sharply."></div>
+        <figcaption><strong>Fig. 2</strong> &mdash; Mean/median authorship size by year.</figcaption>
+      </figure>
+      <figure>
+        <div class="figure-card"><img src="output/figures/fig3_authors_distribution.png" alt="Log-log histogram of authorship size across all publications, showing a long tail toward large collaborations."></div>
+        <figcaption><strong>Fig. 3</strong> &mdash; Distribution of authorship size (log&ndash;log).</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="chapter" id="citations">
+    <div class="chapter-head">
+      <span class="chapter-num">4</span>
+      <h2>Citations</h2>
+    </div>
+    <p>Total citations by publication year mirror the growth in output, compounded by the fact that older papers have simply had longer to accumulate citations (Caveat 04). Mean citations per publication is noisier but trends upward, punctuated by a few exceptionally cited single papers &mdash; most visibly the 2017 multi-messenger neutron-star merger discovery.</p>
+    <figure>
+      <div class="figure-card"><img src="output/figures/fig9_citations_per_year.png" alt="Total citations by publication year on a log axis, and mean citations per publication by year on a linear axis."></div>
+      <figcaption><strong>Fig. 4</strong> &mdash; Total citations by publication year (log scale, left) and mean citations per publication (right).</figcaption>
+    </figure>
+    <p>Citation rate &mdash; citations divided by years since publication, a crude control for paper age &mdash; correlates with collaboration size at Pearson <em>r</em>&nbsp;=&nbsp;0.63 in log&ndash;log space: bigger author lists tend to sit on more heavily cited papers, unsurprising given how many of the largest collaborations (DESI, LIGO) are also among the most-cited fields in the dataset.</p>
+    <figure>
+      <div class="figure-card"><img src="output/figures/fig10_citations_vs_authors.png" alt="Scatter plot of citation rate versus number of authors per publication, with marginal histograms, showing a positive log-log correlation."></div>
+      <figcaption><strong>Fig. 5</strong> &mdash; Citation rate vs. collaboration size, with marginal distributions. Authors are capped at 200 by the export (Caveat 02); the true correlation at the largest collaboration sizes cannot be recovered from this data.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter" id="institutions">
+    <div class="chapter-head">
+      <span class="chapter-num">5</span>
+      <h2>Institutions</h2>
+    </div>
+    <p>Four institutions account for the large majority of institutionally-attributed output: Universidad de los Andes, Universidad de Antioquia, Universidad Nacional de Colombia, and Universidad Industrial de Santander &mdash; the same four that led Forero&#8209;Romero (2024)&rsquo;s ranking three years ago, now joined by a longer tail of smaller contributors. Because the range spans almost two orders of magnitude, the chart below uses a log axis.</p>
+    <figure>
+      <div class="figure-card"><img src="output/figures/fig4_top_institutions.png" alt="Horizontal bar chart of the top 20 Colombian institutions by publication count, log-scaled x-axis, led by Universidad de los Andes."></div>
+      <figcaption><strong>Fig. 6</strong> &mdash; Top 20 Colombian institutions by publication count (log scale).</figcaption>
+    </figure>
+    <div class="table-wrap">
+      <table>
+        <caption>Table 1 &mdash; Top 10 Colombian institutions</caption>
+        <thead>
+          <tr><th class="wrap">Institution</th><th class="num">Pubs.</th><th class="num">Authors</th><th class="num">Citations</th><th class="num"><em>h</em></th><th class="num">Active since</th></tr>
+        </thead>
+        <tbody>
+          <tr class="row-lead"><td class="wrap">Universidad de los Andes</td><td class="num">298</td><td class="num">66</td><td class="num">12,603</td><td class="num">47</td><td class="num">1980</td></tr>
+          <tr><td class="wrap">Universidad de Antioquia</td><td class="num">99</td><td class="num">71</td><td class="num">2,098</td><td class="num">22</td><td class="num">2005</td></tr>
+          <tr><td class="wrap">Universidad Nacional de Colombia</td><td class="num">98</td><td class="num">90</td><td class="num">1,313</td><td class="num">19</td><td class="num">1980</td></tr>
+          <tr><td class="wrap">Universidad Industrial de Santander</td><td class="num">67</td><td class="num">38</td><td class="num">1,950</td><td class="num">21</td><td class="num">2006</td></tr>
+          <tr><td class="wrap">Universidad del Valle</td><td class="num">19</td><td class="num">16</td><td class="num">220</td><td class="num">8</td><td class="num">2012</td></tr>
+          <tr><td class="wrap">Universidad Tecnol&oacute;gica de Pereira</td><td class="num">17</td><td class="num">12</td><td class="num">112</td><td class="num">5</td><td class="num">1997</td></tr>
+          <tr><td class="wrap">Universidad de los Llanos</td><td class="num">14</td><td class="num">1</td><td class="num">42</td><td class="num">4</td><td class="num">2018</td></tr>
+          <tr><td class="wrap">Universidad de Nari&ntilde;o</td><td class="num">12</td><td class="num">5</td><td class="num">187</td><td class="num">7</td><td class="num">2015</td></tr>
+          <tr><td class="wrap">Universidad ECCI</td><td class="num">9</td><td class="num">6</td><td class="num">363</td><td class="num">5</td><td class="num">2017</td></tr>
+          <tr><td class="wrap">Universidad Tecnol&oacute;gica de Bol&iacute;var</td><td class="num">8</td><td class="num">6</td><td class="num">34</td><td class="num">3</td><td class="num">2022</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter" id="authors">
+    <div class="chapter-head">
+      <span class="chapter-num">6</span>
+      <h2>Authors</h2>
+    </div>
+    <p>Rankings below are restricted to authorships carrying a Colombian affiliation, so they aren&rsquo;t swamped by the hundreds of non-Colombian members of the same mega-collaborations a Colombian group belongs to. The top spot is unsurprising in context: this note descends from the same author&rsquo;s own ADS query and prior paper, so his complete bibliography &mdash; including large collaboration papers where he is one of many co-authors &mdash; is fully represented in a way a purely institutional search might not capture as exhaustively for every researcher. Treat the top row as a data-provenance artifact worth naming plainly rather than a claim about relative productivity.</p>
+    <div class="fig-row">
+      <figure>
+        <div class="figure-card"><img src="output/figures/fig5_top_authors.png" alt="Horizontal bar chart of the top 20 Colombian-affiliated authors by publication count."></div>
+        <figcaption><strong>Fig. 7</strong> &mdash; Top 20 authors by publication count.</figcaption>
+      </figure>
+      <figure>
+        <div class="figure-card"><img src="output/figures/fig8_coauthorship_network.png" alt="Co-authorship network graph among Colombian-affiliated authors with five or more publications, showing several small dense clusters."></div>
+        <figcaption><strong>Fig. 8</strong> &mdash; Co-authorship network, authors with &ge;5 publications.</figcaption>
+      </figure>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <caption>Table 2 &mdash; Top 10 authors by publication count</caption>
+        <thead>
+          <tr><th class="wrap">Author</th><th class="wrap">Primary institution</th><th class="num">Pubs.</th><th class="num">Citations</th><th class="num">Active</th></tr>
+        </thead>
+        <tbody>
+          <tr class="row-lead"><td class="wrap">Forero-Romero, Jaime E.</td><td class="wrap">Universidad de los Andes</td><td class="num">225</td><td class="num">10,633</td><td class="num">2013&ndash;26</td></tr>
+          <tr><td class="wrap">Zuluaga, Jorge I.</td><td class="wrap">Universidad de Antioquia</td><td class="num">29</td><td class="num">431</td><td class="num">2013&ndash;25</td></tr>
+          <tr><td class="wrap">Vargas Dom&iacute;nguez, Santiago</td><td class="wrap">Universidad Nacional de Colombia</td><td class="num">20</td><td class="num">470</td><td class="num">2012&ndash;26</td></tr>
+          <tr><td class="wrap">Garc&iacute;a-Varela, Jos&eacute;-Alejandro</td><td class="wrap">Universidad de los Andes</td><td class="num">20</td><td class="num">224</td><td class="num">2001&ndash;26</td></tr>
+          <tr><td class="wrap">Lora-Clavijo, Fabio D.</td><td class="wrap">Universidad Industrial de Santander</td><td class="num">18</td><td class="num">233</td><td class="num">2015&ndash;26</td></tr>
+          <tr><td class="wrap">Dubeibe, Fredy L.</td><td class="wrap">Universidad de los Llanos</td><td class="num">15</td><td class="num">68</td><td class="num">2017&ndash;26</td></tr>
+          <tr><td class="wrap">Romano, Antonio Enea</td><td class="wrap">Universidad de Antioquia</td><td class="num">13</td><td class="num">299</td><td class="num">2013&ndash;25</td></tr>
+          <tr><td class="wrap">Sabogal, Beatriz E.</td><td class="wrap">Universidad de los Andes</td><td class="num">13</td><td class="num">100</td><td class="num">2009&ndash;26</td></tr>
+          <tr><td class="wrap">Gonz&aacute;lez, Guillermo A.</td><td class="wrap">Universidad Industrial de Santander</td><td class="num">12</td><td class="num">185</td><td class="num">2006&ndash;18</td></tr>
+          <tr><td class="wrap">Gieren, Wolfgang P.</td><td class="wrap">Universidad Nacional de Colombia</td><td class="num">12</td><td class="num">224</td><td class="num">1980&ndash;92</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter" id="venues">
+    <div class="chapter-head">
+      <span class="chapter-num">7</span>
+      <h2>Venues &amp; Topics</h2>
+    </div>
+    <p><em>Monthly Notices of the Royal Astronomical Society</em>, <em>The Astrophysical Journal</em>, and the <em>Journal of Cosmology and Astroparticle Physics</em> together carry more than half of all output &mdash; the last driven largely by DESI collaboration papers. Keyword frequency, drawn from ADS-assigned subject tags, shows the field&rsquo;s center of mass sitting squarely in cosmology and extragalactic astrophysics, with solar/stellar and high-energy phenomena as the next tier.</p>
+    <div class="fig-row">
+      <figure>
+        <div class="figure-card"><img src="output/figures/fig6_top_journals.png" alt="Horizontal bar chart of the top 15 journals by publication count, led by Monthly Notices of the Royal Astronomical Society."></div>
+        <figcaption><strong>Fig. 9</strong> &mdash; Top 15 journals.</figcaption>
+      </figure>
+      <figure>
+        <div class="figure-card"><img src="output/figures/fig7_top_keywords.png" alt="Horizontal bar chart of the top 25 keywords by occurrence, led by cosmology and nongalactic astrophysics."></div>
+        <figcaption><strong>Fig. 10</strong> &mdash; Top 25 keywords.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="chapter" id="most-cited">
+    <div class="chapter-head">
+      <span class="chapter-num">8</span>
+      <h2>Most-Cited Works</h2>
+    </div>
+    <p>The single most-cited paper with a Colombian author &mdash; by a wide margin &mdash; is the 2017 LIGO/Virgo multi-messenger discovery of a binary neutron star merger, with 4,140 citations. Eight of the remaining nine top-10 slots belong to DESI collaboration papers from 2022&ndash;2026, a direct consequence of Colombian groups&rsquo; recent entry into that survey.</p>
+    <div class="table-wrap">
+      <table>
+        <caption>Table 3 &mdash; Top 10 most-cited articles</caption>
+        <thead>
+          <tr><th class="wrap">Title</th><th class="num">Year</th><th class="num">Citations</th><th class="num">Authors</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="wrap">Multi-messenger Observations of a Binary Neutron Star Merger</td><td class="num">2017</td><td class="num">4,140</td><td class="num">200</td></tr>
+          <tr><td class="wrap">DESI 2024 VI: cosmological constraints from baryon acoustic oscillations</td><td class="num">2025</td><td class="num">1,766</td><td class="num">200</td></tr>
+          <tr><td class="wrap">Overview of the Instrumentation for the Dark Energy Spectroscopic Instrument</td><td class="num">2022</td><td class="num">591</td><td class="num">200</td></tr>
+          <tr><td class="wrap">DESI 2024 III: baryon acoustic oscillations from galaxies and quasars</td><td class="num">2025</td><td class="num">544</td><td class="num">198</td></tr>
+          <tr><td class="wrap">Data Release 1 of the Dark Energy Spectroscopic Instrument</td><td class="num">2026</td><td class="num">520</td><td class="num">200</td></tr>
+          <tr><td class="wrap">The NANOGrav 15 yr Data Set: Constraints on SMBH Binaries from the GW Background</td><td class="num">2023</td><td class="num">467</td><td class="num">115</td></tr>
+          <tr><td class="wrap">DESI 2024 IV: Baryon Acoustic Oscillations from the Lyman-&alpha; forest</td><td class="num">2025</td><td class="num">380</td><td class="num">199</td></tr>
+          <tr><td class="wrap">Tracing the cosmic web</td><td class="num">2018</td><td class="num">364</td><td class="num">30</td></tr>
+          <tr><td class="wrap">The DESI Bright Galaxy Survey: Final Target Selection, Design, and Validation</td><td class="num">2023</td><td class="num">346</td><td class="num">60</td></tr>
+          <tr><td class="wrap">New horizons for fundamental physics with LISA</td><td class="num">2022</td><td class="num">341</td><td class="num">141</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tight">Author counts of 200 mark the export truncation described in Caveat 02, not necessarily the true collaboration size &mdash; several of these papers have real author lists in the thousands.</p>
+  </section>
+
+  <div class="availability">
+    <h3 class="sub" style="margin-top:0">Data &amp; Code Availability</h3>
+    <p>All source exports, the parsing and analysis pipeline, and every figure and table above are published under an MIT license.</p>
+    <dl>
+      <dt>Repository</dt><dd><a href="https://github.com/forero/colombia-astronomy-bibliometrics" target="_blank" rel="noopener">github.com/forero/colombia-astronomy-bibliometrics</a></dd>
+      <dt>Source data</dt><dd>NASA ADS custom-format exports, queried 2026</dd>
+      <dt>Prior work</dt><dd>Forero&#8209;Romero, J.&nbsp;E. (2024). &ldquo;Astronomy in Colombia: a bibliometric perspective.&rdquo; <a href="https://arxiv.org/abs/2403.02255" target="_blank" rel="noopener">arXiv:2403.02255</a></dd>
+    </dl>
+  </div>
+
+</main>
+
+<footer>
+  <hr class="rule">
+  <p>Figures and tables generated programmatically from ADS metadata; see Scope &amp; Caveats above before citing any individual number. Bibcode format, e.g. <code class="bibcode">2017ApJ...848L..12A</code>, follows the ADS/SIMBAD convention.</p>
+</footer>
+</body>
+</html>
