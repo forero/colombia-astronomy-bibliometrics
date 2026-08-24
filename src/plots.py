@@ -1,18 +1,18 @@
 """Generate figures and tables for the Colombian astronomy bibliometric analysis.
 
 Adapted from the figure/table set in Forero-Romero (2024), "Astronomy in
-Colombia: a bibliometric perspective" (arXiv:2403.02255). That paper also
-uses Web of Science citation counts, which are not present in a plain ADS
-export, so citation-based figures (annual citations, citations vs.
-collaboration size, highly-cited-articles) are not reproduced here. Everything
-below is derived only from fields available in the ADS custom-format export:
-title, authors, affiliations, journal, date, and keywords.
+Colombia: a bibliometric perspective" (arXiv:2403.02255), using ADS citation
+counts (data/raw/export-custom*.txt) matched onto the tagged bibliographic
+export -- see build_dataset.py. The paper's cross-country figures (global
+publication rankings, highly-cited-articles-vs-total-publications by nation)
+need bibliometric data for every other country, which is out of scope here.
 
 Usage:
     python src/plots.py
 """
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PROCESSED = ROOT / "data" / "processed"
 FIG_DIR = ROOT / "output" / "figures"
 TABLE_DIR = ROOT / "output" / "tables"
+CURRENT_YEAR = date.today().year
 
 plt.rcParams.update(
     {
@@ -40,6 +41,23 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     pubs = pd.read_csv(PROCESSED / "publications.csv")
     authors = pd.read_csv(PROCESSED / "authorships.csv")
     return pubs, authors
+
+
+def h_index(citation_counts) -> int:
+    counts = sorted(citation_counts, reverse=True)
+    h = 0
+    for rank, c in enumerate(counts, start=1):
+        if c >= rank:
+            h = rank
+        else:
+            break
+    return h
+
+
+def _strip_markup(text: str) -> str:
+    import re
+
+    return re.sub(r"<[^>]+>", "", str(text))
 
 
 # ---------------------------------------------------------------------------
@@ -102,6 +120,78 @@ def fig_authors_distribution(pubs: pd.DataFrame) -> None:
     plt.close(fig)
 
 
+def fig_citations_per_year(pubs: pd.DataFrame) -> None:
+    stats = pubs.dropna(subset=["num_citations"]).groupby("year")["num_citations"].agg(
+        ["sum", "mean", "count"]
+    )
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.5))
+
+    ax1.bar(stats.index, stats["sum"], color="#1f5aa6", width=0.8)
+    ax1.set_yscale("log")
+    ax1.set_xlabel("Publication year")
+    ax1.set_ylabel("Total citations (log scale)")
+    ax1.set_title("Total citations by publication year")
+
+    ax2.plot(stats.index, stats["mean"], marker="o", ms=3, color="#c0392b")
+    ax2.set_xlabel("Publication year")
+    ax2.set_ylabel("Mean citations per publication")
+    ax2.set_title("Mean citations per publication, by year")
+
+    fig.suptitle(
+        f"Citations accumulated as of {CURRENT_YEAR} — older papers have had more time to be cited",
+        y=1.02,
+        fontsize=10,
+    )
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / "fig9_citations_per_year.png", bbox_inches="tight")
+    plt.close(fig)
+
+
+def fig_citations_vs_authors(pubs: pd.DataFrame) -> float:
+    df = pubs.dropna(subset=["num_citations", "n_authors", "year"]).copy()
+    df["years_since_pub"] = (CURRENT_YEAR - df["year"] + 1).clip(lower=1)
+    df["citation_rate"] = df["num_citations"] / df["years_since_pub"]
+
+    log_authors = np.log10(df["n_authors"])
+    log_rate = np.log10(df["citation_rate"] + 0.1)
+    pearson_r = float(np.corrcoef(log_authors, log_rate)[0, 1])
+
+    fig = plt.figure(figsize=(7, 7))
+    grid = fig.add_gridspec(4, 4, hspace=0.05, wspace=0.05)
+    ax = fig.add_subplot(grid[1:4, 0:3])
+    ax_top = fig.add_subplot(grid[0, 0:3], sharex=ax)
+    ax_right = fig.add_subplot(grid[1:4, 3], sharey=ax)
+
+    ax.scatter(df["n_authors"], df["citation_rate"], s=15, alpha=0.5, color="#1f5aa6")
+    ax.set_xscale("log")
+    ax.set_yscale("symlog", linthresh=1)
+    ax.set_xlabel("Authors per publication (log scale)")
+    ax.set_ylabel("Citations per year since publication")
+
+    ax_top.hist(df["n_authors"], bins=np.logspace(0, np.log10(df["n_authors"].max() + 1), 25),
+                color="#1f5aa6", alpha=0.7)
+    ax_top.set_xscale("log")
+    ax_top.tick_params(labelbottom=False)
+    ax_top.set_yticks([])
+
+    ax_right.hist(
+        df["citation_rate"],
+        bins=np.logspace(-1, np.log10(df["citation_rate"].max() + 1), 25),
+        orientation="horizontal",
+        color="#1f5aa6",
+        alpha=0.7,
+    )
+    ax_right.set_yscale("symlog", linthresh=1)
+    ax_right.tick_params(labelleft=False)
+    ax_right.set_xticks([])
+
+    ax_top.set_title(f"Citation rate vs. collaboration size (Pearson r = {pearson_r:.2f}, log–log)")
+    fig.savefig(FIG_DIR / "fig10_citations_vs_authors.png", bbox_inches="tight")
+    plt.close(fig)
+    return pearson_r
+
+
 def fig_top_institutions(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
     colombian = authors[authors["is_colombian"]]
     counts = (
@@ -123,13 +213,17 @@ def fig_top_institutions(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame
 
 
 def fig_top_authors(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
-    counts = authors.groupby("author")["bibcode"].nunique().sort_values(ascending=False)
+    # Restrict to authors with a Colombian affiliation, otherwise this is
+    # dominated by non-Colombian members of huge international collaborations
+    # (DESI, LIGO/Virgo/KAGRA) that a Colombian-affiliated author also belongs to.
+    colombian = authors[authors["is_colombian"]]
+    counts = colombian.groupby("author")["bibcode"].nunique().sort_values(ascending=False)
     top = counts.head(top_n)
 
     fig, ax = plt.subplots(figsize=(8, 7))
     ax.barh(top.index[::-1], top.to_numpy()[::-1], color="#1f5aa6")
     ax.set_xlabel("Publications")
-    ax.set_title(f"Top {top_n} authors by publication count")
+    ax.set_title(f"Top {top_n} authors by publication count (Colombian-affiliated)")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig5_top_authors.png", bbox_inches="tight")
     plt.close(fig)
@@ -221,7 +315,7 @@ def fig_coauthorship_network(authors: pd.DataFrame, min_pubs: int = 5) -> None:
 # ---------------------------------------------------------------------------
 
 
-def table_institutions(authors: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
+def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
     colombian = authors[
         authors["is_colombian"] & (authors["institution"] != "Other Colombian institution")
     ]
@@ -229,41 +323,91 @@ def table_institutions(authors: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
         n_publications=("bibcode", "nunique"),
         n_unique_authors=("author", "nunique"),
     )
-    year_map = pd.read_csv(PROCESSED / "publications.csv")[["bibcode", "year"]]
-    merged = colombian.merge(year_map, on="bibcode")
+    merged = colombian.merge(pubs[["bibcode", "year", "num_citations"]], on="bibcode")
     years = merged.groupby("institution")["year"].agg(first_year="min", last_year="max")
-    table = grouped.join(years).sort_values("n_publications", ascending=False).head(top_n)
+
+    # One row per (institution, bibcode) so a paper with several co-authors at
+    # the same institution doesn't have its citations counted more than once.
+    per_pub = merged.drop_duplicates(["institution", "bibcode"])
+    citation_stats = per_pub.groupby("institution")["num_citations"].agg(
+        total_citations="sum", h_index=h_index
+    )
+    citation_stats["total_citations"] = citation_stats["total_citations"].astype(int)
+
+    table = (
+        grouped.join(years)
+        .join(citation_stats)
+        .sort_values("n_publications", ascending=False)
+        .head(top_n)
+    )
     table = table.reset_index().rename(columns={"institution": "Institution"})
     table.to_csv(TABLE_DIR / "table1_institutions.csv", index=False)
     _write_markdown(table, TABLE_DIR / "table1_institutions.md", "Top Colombian institutions")
     return table
 
 
-def table_top_authors(authors: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
-    year_map = pd.read_csv(PROCESSED / "publications.csv")[["bibcode", "year"]]
-    merged = authors.merge(year_map, on="bibcode")
+def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:
+    colombian = authors[
+        authors["is_colombian"] & (authors["institution"] != "Other Colombian institution")
+    ]
+    inst_map = colombian.groupby("bibcode")["institution"].agg(
+        lambda s: "; ".join(sorted(set(s)))
+    )
+
+    top = pubs.sort_values("num_citations", ascending=False).head(top_n).copy()
+    top["title"] = top["title"].map(_strip_markup)
+    top["colombian_institutions"] = top["bibcode"].map(inst_map).fillna("")
+    cols = [
+        "bibcode",
+        "title",
+        "year",
+        "journal",
+        "num_citations",
+        "n_authors",
+        "colombian_institutions",
+    ]
+    table = top[cols]
+    table.to_csv(TABLE_DIR / "table4_top_cited.csv", index=False)
+    _write_markdown(table, TABLE_DIR / "table4_top_cited.md", "Top 10 most-cited articles")
+    return table
+
+
+def table_top_authors(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
+    # Restrict to authors with a Colombian affiliation -- see fig_top_authors.
+    colombian = authors[authors["is_colombian"]]
+    merged = colombian.merge(pubs[["bibcode", "year", "num_citations"]], on="bibcode")
+
     grouped = merged.groupby("author").agg(
         n_publications=("bibcode", "nunique"),
         first_year=("year", "min"),
         last_year=("year", "max"),
     )
-    # Most common institution per author (mode), Colombian only.
-    colombian = merged[merged["is_colombian"] & merged["institution"].notna()]
+    # Total citations, counted once per unique publication per author.
+    per_pub = merged.drop_duplicates(["author", "bibcode"])
+    total_citations = per_pub.groupby("author")["num_citations"].sum().rename("total_citations")
+
     primary_inst = (
-        colombian.groupby("author")["institution"]
+        merged[merged["institution"].notna()]
+        .groupby("author")["institution"]
         .agg(lambda s: s.value_counts().idxmax() if len(s) else None)
         .rename("primary_institution")
     )
     table = (
-        grouped.join(primary_inst)
+        grouped.join(total_citations)
+        .join(primary_inst)
         .sort_values("n_publications", ascending=False)
         .head(top_n)
         .reset_index()
         .rename(columns={"author": "Author"})
     )
     table["primary_institution"] = table["primary_institution"].fillna("")
+    table["total_citations"] = table["total_citations"].fillna(0).astype(int)
     table.to_csv(TABLE_DIR / "table2_top_authors.csv", index=False)
-    _write_markdown(table, TABLE_DIR / "table2_top_authors.md", "Top authors by publication count")
+    _write_markdown(
+        table,
+        TABLE_DIR / "table2_top_authors.md",
+        "Top Colombian-affiliated authors by publication count",
+    )
     return table
 
 
@@ -277,6 +421,7 @@ def table_journals(pubs: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
 
 def table_summary(pubs: pd.DataFrame, authors: pd.DataFrame) -> None:
     colombian = authors[authors["is_colombian"]]
+    most_cited = pubs.loc[pubs["num_citations"].idxmax()]
     summary = {
         "Total publications": len(pubs),
         "Year range": f"{int(pubs['year'].min())}–{int(pubs['year'].max())}",
@@ -288,6 +433,10 @@ def table_summary(pubs: pd.DataFrame, authors: pd.DataFrame) -> None:
         ].nunique(),
         "Mean authors per publication": round(pubs["n_authors"].mean(), 2),
         "Median authors per publication": int(pubs["n_authors"].median()),
+        "Total citations": int(pubs["num_citations"].sum()),
+        "Overall h-index": h_index(pubs["num_citations"]),
+        "Most-cited paper": f"{_strip_markup(most_cited['title'])} "
+        f"({int(most_cited['year'])}, {int(most_cited['num_citations'])} citations)",
     }
     lines = ["# Summary statistics", ""]
     for k, v in summary.items():
@@ -313,14 +462,17 @@ def main() -> None:
     fig_cumulative_and_annual(pubs)
     fig_avg_authors_per_year(pubs)
     fig_authors_distribution(pubs)
+    fig_citations_per_year(pubs)
+    fig_citations_vs_authors(pubs)
     fig_top_institutions(authors)
     fig_top_authors(authors)
     fig_top_journals(pubs)
     fig_top_keywords(pubs)
     fig_coauthorship_network(authors)
 
-    table_institutions(authors)
-    table_top_authors(authors)
+    table_institutions(authors, pubs)
+    table_top_authors(authors, pubs)
+    table_top_cited(pubs, authors)
     table_journals(pubs)
     table_summary(pubs, authors)
 

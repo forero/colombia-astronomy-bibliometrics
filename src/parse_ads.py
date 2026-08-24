@@ -32,6 +32,7 @@ class Publication:
     url: str = ""
     doi: str = ""
     arxiv_id: str = ""
+    num_citations: int | None = None  # filled in by build_dataset.py, not parsed here
 
 
 def _split_records(text: str) -> list[str]:

@@ -1,0 +1,14 @@
+# Top 10 most-cited articles
+
+| bibcode | title | year | journal | num_citations | n_authors | colombian_institutions |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2017ApJ...848L..12A | Multi-messenger Observations of a Binary Neutron Star Merger | 2017 | The Astrophysical Journal Letters | 4140 | 200 |  |
+| 2025JCAP...02..021A | DESI 2024 VI: cosmological constraints from the measurements of baryon acoustic oscillations | 2025 | Journal of Cosmology and Astroparticle Physics | 1766 | 200 | Universidad de los Andes |
+| 2022AJ....164..207D | Overview of the Instrumentation for the Dark Energy Spectroscopic Instrument | 2022 | The Astronomical Journal | 591 | 200 | Universidad de los Andes |
+| 2025JCAP...04..012A | DESI 2024 III: baryon acoustic oscillations from galaxies and quasars | 2025 | Journal of Cosmology and Astroparticle Physics | 544 | 198 | Universidad de los Andes |
+| 2026AJ....171..285D | Data Release 1 of the Dark Energy Spectroscopic Instrument | 2026 | The Astronomical Journal | 520 | 200 | Universidad de los Andes |
+| 2023ApJ...952L..37A | The NANOGrav 15 yr Data Set: Constraints on Supermassive Black Hole Binaries from the Gravitational-wave Background | 2023 | The Astrophysical Journal Letters | 467 | 115 | Universidad El Bosque |
+| 2025JCAP...01..124A | DESI 2024 IV: Baryon Acoustic Oscillations from the Lyman alpha forest | 2025 | Journal of Cosmology and Astroparticle Physics | 380 | 199 | Universidad de los Andes |
+| 2018MNRAS.473.1195L | Tracing the cosmic web | 2018 | Monthly Notices of the Royal Astronomical Society | 364 | 30 | Universidad de los Andes |
+| 2023AJ....165..253H | The DESI Bright Galaxy Survey: Final Target Selection, Design, and Validation | 2023 | The Astronomical Journal | 346 | 60 | Universidad de los Andes |
+| 2022LRR....25....4A | New horizons for fundamental physics with LISA | 2022 | Living Reviews in Relativity | 341 | 141 | Fundación Universitaria Konrad Lorenz |
