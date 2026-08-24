@@ -68,14 +68,26 @@ affiliation, so they aren't swamped by the hundreds of non-Colombian members
 of huge international collaborations (DESI, LIGO/Virgo/KAGRA, Pierre Auger)
 that a Colombian group also belongs to.
 
+## Author name matching
+
+There's no author-id (ORCID) in this export, and the same person shows up
+under several ADS name-string variants across records — different levels of
+given-name detail ("Forero-Romero, J. E." vs. "Forero-Romero, Jaime E."),
+occasional metadata typos ("Jamie E." for "Jaime E."), and inconsistent
+compound-surname splits ("Enea Romano, Antonio" vs. "Romano, Antonio Enea").
+`src/name_matching.py` merges these heuristically among Colombian-affiliated
+authorships: names with the same surname are merged when one's initials are
+a prefix of the other's, and names are also merged when they spell out the
+same full given/surname words regardless of which side of the comma they
+land on. The cluster's most fully-spelled-out variant is used as the display
+name. This is conservative by construction but can still occasionally
+over-merge two different people who share a surname and are only ever
+recorded with a bare initial, or under-merge someone who publishes under
+genuinely different name spellings.
+
 ## Known limitations
 
-- **Author name disambiguation is not attempted.** The same person can appear
-  under several ADS name-string variants (initials vs. full name, occasional
-  typos in the source metadata), so per-author publication/citation counts
-  and the co-authorship network undercount some individuals. Resolving this
-  properly needs ORCID-linked ADS records, which aren't in a plain
-  custom-format export.
+
 - **Institution matching is substring-based**, not a controlled ROR/GRID
   lookup, and Colombian secondary schools / non-academic institutions that
   happen to add "Colombia" to their affiliation string are counted the same
@@ -112,6 +124,7 @@ h-index per institution), `table2_top_authors`, `table3_journals`,
 
 As of the current data snapshot: 724 publications (1980–2027, including
 in-press/forthcoming items already assigned a bibcode), spanning 57 journals,
-about 500 unique authors with a Colombian affiliation, 26,550 total citations,
-and an overall h-index of 65. The most-cited paper is the 2017 multi-messenger
-neutron-star-merger discovery (GW170817), with 4,140 citations.
+about 380 unique authors (after name matching) with a Colombian affiliation,
+26,550 total citations, and an overall h-index of 65. The most-cited paper is
+the 2017 multi-messenger neutron-star-merger discovery (GW170817), with 4,140
+citations.

@@ -2,24 +2,24 @@
 
 | Institution | n_publications | n_unique_authors | first_year | last_year | total_citations | h_index |
 | --- | --- | --- | --- | --- | --- | --- |
-| Universidad de los Andes | 298 | 89 | 1980 | 2026 | 12603 | 47 |
-| Universidad de Antioquia | 99 | 90 | 2005 | 2026 | 2098 | 22 |
-| Universidad Nacional de Colombia | 99 | 119 | 1980 | 2027 | 1313 | 19 |
-| Universidad Industrial de Santander | 67 | 50 | 2006 | 2026 | 1950 | 21 |
-| Universidad del Valle | 19 | 18 | 2012 | 2025 | 220 | 8 |
-| Universidad Tecnológica de Pereira | 17 | 14 | 1997 | 2026 | 112 | 5 |
-| Universidad de los Llanos | 14 | 2 | 2018 | 2026 | 42 | 4 |
-| Universidad de Nariño | 12 | 6 | 2015 | 2026 | 187 | 7 |
-| Universidad ECCI | 9 | 9 | 2017 | 2026 | 363 | 5 |
-| Universidad Tecnológica de Bolívar | 8 | 8 | 2022 | 2026 | 34 | 3 |
-| Universidad Militar Nueva Granada | 8 | 5 | 2017 | 2026 | 103 | 4 |
+| Universidad de los Andes | 298 | 66 | 1980 | 2026 | 12603 | 47 |
+| Universidad de Antioquia | 99 | 71 | 2005 | 2026 | 2098 | 22 |
+| Universidad Nacional de Colombia | 99 | 91 | 1980 | 2027 | 1313 | 19 |
+| Universidad Industrial de Santander | 67 | 38 | 2006 | 2026 | 1950 | 21 |
+| Universidad del Valle | 19 | 16 | 2012 | 2025 | 220 | 8 |
+| Universidad Tecnológica de Pereira | 17 | 12 | 1997 | 2026 | 112 | 5 |
+| Universidad de los Llanos | 14 | 1 | 2018 | 2026 | 42 | 4 |
+| Universidad de Nariño | 12 | 5 | 2015 | 2026 | 187 | 7 |
+| Universidad ECCI | 9 | 6 | 2017 | 2026 | 363 | 5 |
+| Universidad Tecnológica de Bolívar | 8 | 6 | 2022 | 2026 | 34 | 3 |
+| Universidad Militar Nueva Granada | 8 | 4 | 2017 | 2026 | 103 | 4 |
 | Universidad del Atlántico | 5 | 6 | 1997 | 2023 | 25 | 2 |
-| Fundación Universitaria Konrad Lorenz | 5 | 3 | 2016 | 2022 | 643 | 4 |
-| Universidad de Medellín | 5 | 4 | 2010 | 2016 | 192 | 5 |
+| Fundación Universitaria Konrad Lorenz | 5 | 2 | 2016 | 2022 | 643 | 4 |
+| Universidad de Medellín | 5 | 3 | 2010 | 2016 | 192 | 5 |
 | Universidad Distrital Francisco José de Caldas | 5 | 7 | 2019 | 2022 | 18 | 2 |
 | Universidad Antonio Nariño | 4 | 4 | 2024 | 2026 | 12 | 2 |
 | Universidad EAFIT | 3 | 4 | 2019 | 2026 | 14 | 2 |
-| Universidad de Investigación y Desarrollo | 3 | 2 | 2025 | 2025 | 15 | 3 |
+| Universidad de Investigación y Desarrollo | 3 | 1 | 2025 | 2025 | 15 | 3 |
 | Pontificia Universidad Javeriana | 3 | 4 | 2018 | 2022 | 9 | 2 |
 | COLCIENCIAS / MinCiencias | 3 | 2 | 2015 | 2021 | 4 | 1 |
 | Universidad El Bosque | 3 | 2 | 2023 | 2026 | 474 | 2 |

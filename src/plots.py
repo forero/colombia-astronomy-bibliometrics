@@ -20,6 +20,8 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
+from name_matching import build_canonical_name_map
+
 ROOT = Path(__file__).resolve().parent.parent
 PROCESSED = ROOT / "data" / "processed"
 FIG_DIR = ROOT / "output" / "figures"
@@ -40,6 +42,15 @@ plt.rcParams.update(
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     pubs = pd.read_csv(PROCESSED / "publications.csv")
     authors = pd.read_csv(PROCESSED / "authorships.csv")
+
+    # Merge ADS name-string variants ("Forero-Romero, J. E." / "Forero-Romero,
+    # Jaime E.") that refer to the same person -- see name_matching.py. Only
+    # done among Colombian-affiliated authorships, since that's the subset
+    # used for author-level rankings and the co-authorship network.
+    colombian_names = authors.loc[authors["is_colombian"], "author"].tolist()
+    canonical_map = build_canonical_name_map(colombian_names)
+    authors["author_canonical"] = authors["author"].map(lambda n: canonical_map.get(n, n))
+
     return pubs, authors
 
 
@@ -217,7 +228,11 @@ def fig_top_authors(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
     # dominated by non-Colombian members of huge international collaborations
     # (DESI, LIGO/Virgo/KAGRA) that a Colombian-affiliated author also belongs to.
     colombian = authors[authors["is_colombian"]]
-    counts = colombian.groupby("author")["bibcode"].nunique().sort_values(ascending=False)
+    counts = (
+        colombian.groupby("author_canonical")["bibcode"]
+        .nunique()
+        .sort_values(ascending=False)
+    )
     top = counts.head(top_n)
 
     fig, ax = plt.subplots(figsize=(8, 7))
@@ -270,7 +285,7 @@ def fig_top_keywords(pubs: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
 def fig_coauthorship_network(authors: pd.DataFrame, min_pubs: int = 5) -> None:
     """Co-authorship network among prolific, Colombian-affiliated authors."""
     colombian = authors[authors["is_colombian"]]
-    pub_counts = colombian.groupby("author")["bibcode"].nunique()
+    pub_counts = colombian.groupby("author_canonical")["bibcode"].nunique()
     core_authors = set(pub_counts[pub_counts >= min_pubs].index)
     if len(core_authors) < 2:
         return
@@ -279,9 +294,9 @@ def fig_coauthorship_network(authors: pd.DataFrame, min_pubs: int = 5) -> None:
     for author, n in pub_counts[pub_counts >= min_pubs].items():
         g.add_node(author, n_pubs=int(n))
 
-    subset = colombian[colombian["author"].isin(core_authors)]
+    subset = colombian[colombian["author_canonical"].isin(core_authors)]
     for _, group in subset.groupby("bibcode"):
-        coauthors = list(dict.fromkeys(group["author"]))
+        coauthors = list(dict.fromkeys(group["author_canonical"]))
         for i in range(len(coauthors)):
             for j in range(i + 1, len(coauthors)):
                 a, b = coauthors[i], coauthors[j]
@@ -321,7 +336,7 @@ def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 2
     ]
     grouped = colombian.groupby("institution").agg(
         n_publications=("bibcode", "nunique"),
-        n_unique_authors=("author", "nunique"),
+        n_unique_authors=("author_canonical", "nunique"),
     )
     merged = colombian.merge(pubs[["bibcode", "year", "num_citations"]], on="bibcode")
     years = merged.groupby("institution")["year"].agg(first_year="min", last_year="max")
@@ -377,18 +392,20 @@ def table_top_authors(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25
     colombian = authors[authors["is_colombian"]]
     merged = colombian.merge(pubs[["bibcode", "year", "num_citations"]], on="bibcode")
 
-    grouped = merged.groupby("author").agg(
+    grouped = merged.groupby("author_canonical").agg(
         n_publications=("bibcode", "nunique"),
         first_year=("year", "min"),
         last_year=("year", "max"),
     )
     # Total citations, counted once per unique publication per author.
-    per_pub = merged.drop_duplicates(["author", "bibcode"])
-    total_citations = per_pub.groupby("author")["num_citations"].sum().rename("total_citations")
+    per_pub = merged.drop_duplicates(["author_canonical", "bibcode"])
+    total_citations = (
+        per_pub.groupby("author_canonical")["num_citations"].sum().rename("total_citations")
+    )
 
     primary_inst = (
         merged[merged["institution"].notna()]
-        .groupby("author")["institution"]
+        .groupby("author_canonical")["institution"]
         .agg(lambda s: s.value_counts().idxmax() if len(s) else None)
         .rename("primary_institution")
     )
@@ -398,7 +415,7 @@ def table_top_authors(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25
         .sort_values("n_publications", ascending=False)
         .head(top_n)
         .reset_index()
-        .rename(columns={"author": "Author"})
+        .rename(columns={"author_canonical": "Author"})
     )
     table["primary_institution"] = table["primary_institution"].fillna("")
     table["total_citations"] = table["total_citations"].fillna(0).astype(int)
@@ -426,7 +443,7 @@ def table_summary(pubs: pd.DataFrame, authors: pd.DataFrame) -> None:
         "Total publications": len(pubs),
         "Year range": f"{int(pubs['year'].min())}–{int(pubs['year'].max())}",
         "Total unique authors": authors["author"].nunique(),
-        "Unique authors with a Colombian affiliation": colombian["author"].nunique(),
+        "Unique authors with a Colombian affiliation": colombian["author_canonical"].nunique(),
         "Unique journals": pubs["journal"].nunique(),
         "Unique Colombian institutions identified": colombian.loc[
             colombian["institution"] != "Other Colombian institution", "institution"
