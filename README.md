@@ -146,11 +146,21 @@ genuinely different name spellings.
 8. `fig8_coauthorship_network.png` — co-authorship network among Colombian-affiliated authors with ≥5 publications
 9. `fig9_citations_per_year.png` — total and mean citations by publication year
 10. `fig10_citations_vs_authors.png` — citation rate vs. collaboration size, with marginal histograms and Pearson r
+11. `fig11_top_institutions_small_teams.png` — the Fig. 4 ranking restricted to publications with ≤30 authors
 
 **Tables** (`output/tables/`): `table1_institutions` (adds total citations and
 h-index per institution), `table2_top_authors`, `table3_journals`,
-`table4_top_cited` (top 10 most-cited articles) — all CSV + Markdown — plus
-`summary_stats.md`.
+`table4_top_cited` (top 10 most-cited articles), `table5_institutions_small_teams`
+— all CSV + Markdown — plus `summary_stats.md`.
+
+`fig11` / `table5` re-rank institutions counting only publications with at most
+30 authors (480 of 723 records, 66% of the papers but 32% of the citations).
+Table 1 conflates Colombia-led work with membership in DESI / LIGO-Virgo-KAGRA /
+Pierre Auger — one Colombian coauthor on a 3,000-author paper contributes a full
+publication and its full citation count — and the restricted view separates the
+two. It changes the head of the ranking substantially: Universidad de los Andes
+falls from 298 to 106 publications while Universidad Nacional goes from 99 to
+97, turning a three-to-one lead into a near three-way tie.
 
 As of the current data snapshot: 723 publications (1980–2026; the sole 2027
 in-press record is excluded, see Known limitations), spanning 56 journals,

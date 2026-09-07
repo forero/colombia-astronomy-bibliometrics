@@ -335,7 +335,8 @@ def fig_coauthorship_network(authors: pd.DataFrame, min_pubs: int = 5) -> None:
 # ---------------------------------------------------------------------------
 
 
-def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
+def _institution_stats(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int) -> pd.DataFrame:
+    """Per-institution publication, author and citation stats, ranked by pubs."""
     colombian = authors[
         authors["is_colombian"] & (authors["institution"] != "Other Colombian institution")
     ]
@@ -360,10 +361,67 @@ def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 2
         .sort_values("n_publications", ascending=False)
         .head(top_n)
     )
-    table = table.reset_index().rename(columns={"institution": "Institution"})
+    return table.reset_index().rename(columns={"institution": "Institution"})
+
+
+def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
+    table = _institution_stats(authors, pubs, top_n)
     table.to_csv(TABLE_DIR / "table1_institutions.csv", index=False)
     _write_markdown(table, TABLE_DIR / "table1_institutions.md", "Top Colombian institutions")
     return table
+
+
+def table_institutions_small_teams(
+    authors: pd.DataFrame, pubs: pd.DataFrame, max_authors: int = 30, top_n: int = 25
+) -> pd.DataFrame:
+    """The same ranking, excluding papers written by large collaborations.
+
+    Table 1 is heavily shaped by DESI / LIGO-Virgo-KAGRA / Pierre Auger
+    membership: a single Colombian coauthor on a 3,000-author paper adds a
+    publication and its full citation count to their institution's row. This
+    view keeps only publications with at most `max_authors` authors, so what is
+    left is closer to work led from Colombia.
+    """
+    small = pubs[pubs["n_authors"] <= max_authors]
+    small_authors = authors[authors["bibcode"].isin(set(small["bibcode"]))]
+    table = _institution_stats(small_authors, small, top_n)
+    table.to_csv(TABLE_DIR / "table5_institutions_small_teams.csv", index=False)
+    _write_markdown(
+        table,
+        TABLE_DIR / "table5_institutions_small_teams.md",
+        f"Top Colombian institutions, publications with <= {max_authors} authors",
+    )
+    return table
+
+
+def fig_top_institutions_small_teams(
+    authors: pd.DataFrame, pubs: pd.DataFrame, max_authors: int = 30, top_n: int = 20
+) -> pd.DataFrame:
+    """Fig. 4's ranking restricted to publications with <= max_authors authors."""
+    small = pubs[pubs["n_authors"] <= max_authors]
+    colombian = authors[
+        authors["is_colombian"]
+        & (authors["institution"] != "Other Colombian institution")
+        & authors["bibcode"].isin(set(small["bibcode"]))
+    ]
+    counts = (
+        colombian.groupby("institution")["bibcode"]
+        .nunique()
+        .sort_values(ascending=False)
+    )
+    top = counts.head(top_n)
+
+    fig, ax = plt.subplots(figsize=(8, 7))
+    ax.barh(top.index[::-1], top.to_numpy()[::-1], color="#a6541f")
+    ax.set_xscale("log")
+    ax.set_xlabel("Publications (log scale)")
+    ax.set_title(
+        f"Top {top_n} Colombian institutions, papers with \u2264{max_authors} authors"
+    )
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / "fig11_top_institutions_small_teams.png", bbox_inches="tight")
+    plt.close(fig)
+    return counts
 
 
 def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:
@@ -491,8 +549,10 @@ def main() -> None:
     fig_top_journals(pubs)
     fig_top_keywords(pubs)
     fig_coauthorship_network(authors)
+    fig_top_institutions_small_teams(authors, pubs)
 
     table_institutions(authors, pubs)
+    table_institutions_small_teams(authors, pubs)
     table_top_authors(authors, pubs)
     table_top_cited(pubs, authors)
     table_journals(pubs)
