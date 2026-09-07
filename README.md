@@ -35,6 +35,11 @@ data/raw/export-custom*.txt ───────┤  src/parse_citations.py (ci
 data/processed/publications.csv   (one row per publication, incl. num_citations)
 data/processed/authorships.csv    (one row per author × publication,
                                     with institution match + Colombian flag)
+                                    │  src/fetch_full_authors.py
+                                    │  (ADS API: repairs the 200-author
+                                    │   truncation in place; needs a token)
+                                    ▼
+                       same two CSVs, with full author lists
                                     │  src/plots.py
                                     ▼
 output/figures/*.png
@@ -47,9 +52,18 @@ output/tables/*.csv, *.md
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python3 src/build_dataset.py   # parse raw exports -> data/processed/*.csv
-python3 src/plots.py           # -> output/figures/*.png, output/tables/*
+python3 src/build_dataset.py       # parse raw exports -> data/processed/*.csv
+python3 src/fetch_full_authors.py  # ADS API: undo the 200-author truncation
+python3 src/plots.py               # -> output/figures/*.png, output/tables/*
 ```
+
+`fetch_full_authors.py` needs an ADS API token, read from `$ADS_DEV_KEY` or
+`~/.ads/dev_key`; get one at
+<https://ui.adsabs.harvard.edu/user/settings/token>. It caches every API
+response in `data/raw/ads_full_authors.json`, so with that file committed a
+re-run is a no-op offline for the records already fetched. It **must** run
+after `build_dataset.py` — that script rewrites the processed CSVs from the raw
+exports and so reintroduces the truncation.
 
 ## Institution matching
 
@@ -104,7 +118,15 @@ genuinely different name spellings.
   affected rows of the processed CSVs; responses are cached in
   `data/raw/ads_full_authors.json`. Re-running `build_dataset.py` from the raw
   exports reintroduces the truncation, so run `fetch_full_authors.py` after it
-  (it needs an ADS token in `$ADS_DEV_KEY` or `~/.ads/dev_key`).
+  (it needs an ADS token in `$ADS_DEV_KEY` or `~/.ads/dev_key`). The truncation
+  was not a neutral cut: these collaborations list authors alphabetically, so
+  the 200-author cap systematically dropped Colombian coauthors, whose
+  surnames mostly sort past that point. Repairing it took the publications
+  with *no* detected Colombian author from 57 down to 20, and moved several
+  institution totals substantially (Universidad Industrial de Santander 67 →
+  84 publications, Universidad de Antioquia 99 → 118, Universidad de Medellín
+  5 → 24). Any future export that reintroduces the cap will re-introduce that
+  bias, not just an undercount of author-list length.
 - **Citation counts are a single ADS snapshot** (as of the export date), not
   a per-year citation history, so "citations per year since publication" in
   Fig. 10/Table 1 is total citations divided by paper age, not an observed
