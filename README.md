@@ -165,7 +165,7 @@ same cut to the most-cited list: only one of Table 4's ten papers survives it
 (*Tracing the cosmic web*, at exactly 30 authors), and the top entry drops from
 4,140 citations to 364.
 
-As of the current data snapshot: 723 publications (1980–2026; the sole 2027
+As of the current data snapshot, compiled September 2026: 723 publications (1980–2026; the sole 2027
 in-press record is excluded, see Known limitations), spanning 56 journals,
 about 403 unique authors (after name matching) with a Colombian affiliation,
 26,550 total citations, and an overall h-index of 65. The most-cited paper is
