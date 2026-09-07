@@ -371,38 +371,60 @@ def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 2
     return table
 
 
-def table_institutions_small_teams(
-    authors: pd.DataFrame, pubs: pd.DataFrame, max_authors: int = 30, top_n: int = 25
-) -> pd.DataFrame:
-    """The same ranking, excluding papers written by large collaborations.
+COLOMBIA_LED_MIN_SHARE = 0.10
 
-    Table 1 is heavily shaped by DESI / LIGO-Virgo-KAGRA / Pierre Auger
-    membership: a single Colombian coauthor on a 3,000-author paper adds a
-    publication and its full citation count to their institution's row. This
-    view keeps only publications with at most `max_authors` authors, so what is
-    left is closer to work led from Colombia.
+
+def colombia_led(pubs: pd.DataFrame, min_share: float = COLOMBIA_LED_MIN_SHARE) -> pd.DataFrame:
+    """Publications where Colombians are at least `min_share` of the author list.
+
+    Table 1 conflates two different things: work led from Colombia, and
+    membership in a large international collaboration. A single Colombian
+    coauthor on a 3,000-author DESI paper adds a publication and its full
+    citation count to their institution's row, exactly like a three-author paper
+    written entirely in Bogota.
+
+    Filtering on the Colombian *share* of the author list separates them, and is
+    preferable to a cap on author count: it is dimensionless, so it does not go
+    stale as collaborations keep growing, and it keeps genuinely
+    Colombia-heavy large papers that a size cut would throw away (e.g. the 2020
+    Arrokoth stellar-occultation paper, 133 authors of whom 15 are Colombian).
+
+    A size cut has no natural threshold to pick anyway: the author-count
+    histogram's only visible gap is at 80-100 authors, which separates large
+    consortium papers from enormous ones rather than isolating Colombia-led
+    work. The 31-80 band is almost entirely DESI technical papers carrying a
+    single Colombian coauthor (mean Colombian share 2%).
     """
-    small = pubs[pubs["n_authors"] <= max_authors]
-    small_authors = authors[authors["bibcode"].isin(set(small["bibcode"]))]
-    table = _institution_stats(small_authors, small, top_n)
-    table.to_csv(TABLE_DIR / "table5_institutions_small_teams.csv", index=False)
+    share = pubs["n_colombian_authors"] / pubs["n_authors"]
+    return pubs[share >= min_share]
+
+
+def table_institutions_colombia_led(
+    authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25
+) -> pd.DataFrame:
+    """Table 1's ranking over Colombia-led publications only."""
+    led = colombia_led(pubs)
+    led_authors = authors[authors["bibcode"].isin(set(led["bibcode"]))]
+    table = _institution_stats(led_authors, led, top_n)
+    table.to_csv(TABLE_DIR / "table5_institutions_colombia_led.csv", index=False)
     _write_markdown(
         table,
-        TABLE_DIR / "table5_institutions_small_teams.md",
-        f"Top Colombian institutions, publications with <= {max_authors} authors",
+        TABLE_DIR / "table5_institutions_colombia_led.md",
+        f"Top Colombian institutions, publications >= "
+        f"{COLOMBIA_LED_MIN_SHARE:.0%} Colombian-authored",
     )
     return table
 
 
-def fig_top_institutions_small_teams(
-    authors: pd.DataFrame, pubs: pd.DataFrame, max_authors: int = 30, top_n: int = 20
+def fig_top_institutions_colombia_led(
+    authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 20
 ) -> pd.DataFrame:
-    """Fig. 4's ranking restricted to publications with <= max_authors authors."""
-    small = pubs[pubs["n_authors"] <= max_authors]
+    """Fig. 4's ranking over Colombia-led publications only."""
+    led = colombia_led(pubs)
     colombian = authors[
         authors["is_colombian"]
         & (authors["institution"] != "Other Colombian institution")
-        & authors["bibcode"].isin(set(small["bibcode"]))
+        & authors["bibcode"].isin(set(led["bibcode"]))
     ]
     counts = (
         colombian.groupby("institution")["bibcode"]
@@ -416,10 +438,11 @@ def fig_top_institutions_small_teams(
     ax.set_xscale("log")
     ax.set_xlabel("Publications (log scale)")
     ax.set_title(
-        f"Top {top_n} Colombian institutions, papers with \u2264{max_authors} authors"
+        f"Top {top_n} Colombian institutions, papers "
+        f"\u2265{COLOMBIA_LED_MIN_SHARE:.0%} Colombian-authored"
     )
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig11_top_institutions_small_teams.png", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "fig11_top_institutions_colombia_led.png", bbox_inches="tight")
     plt.close(fig)
     return counts
 
@@ -454,21 +477,21 @@ def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) 
     return table
 
 
-def table_top_cited_small_teams(
-    pubs: pd.DataFrame, authors: pd.DataFrame, max_authors: int = 30, top_n: int = 10
+def table_top_cited_colombia_led(
+    pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10
 ) -> pd.DataFrame:
-    """Most-cited papers once the large international collaborations are out.
+    """Most-cited papers among the Colombia-led ones.
 
     Table 4 is nine-tenths DESI and LIGO/Virgo/KAGRA; this view shows which
     Colombia-led papers draw the most citations on their own.
     """
-    small = pubs[pubs["n_authors"] <= max_authors]
-    table = _top_cited(small, authors, top_n)
-    table.to_csv(TABLE_DIR / "table6_top_cited_small_teams.csv", index=False)
+    table = _top_cited(colombia_led(pubs), authors, top_n)
+    table.to_csv(TABLE_DIR / "table6_top_cited_colombia_led.csv", index=False)
     _write_markdown(
         table,
-        TABLE_DIR / "table6_top_cited_small_teams.md",
-        f"Top {top_n} most-cited articles, publications with <= {max_authors} authors",
+        TABLE_DIR / "table6_top_cited_colombia_led.md",
+        f"Top {top_n} most-cited articles, publications >= "
+        f"{COLOMBIA_LED_MIN_SHARE:.0%} Colombian-authored",
     )
     return table
 
@@ -572,13 +595,13 @@ def main() -> None:
     fig_top_journals(pubs)
     fig_top_keywords(pubs)
     fig_coauthorship_network(authors)
-    fig_top_institutions_small_teams(authors, pubs)
+    fig_top_institutions_colombia_led(authors, pubs)
 
     table_institutions(authors, pubs)
-    table_institutions_small_teams(authors, pubs)
+    table_institutions_colombia_led(authors, pubs)
     table_top_authors(authors, pubs)
     table_top_cited(pubs, authors)
-    table_top_cited_small_teams(pubs, authors)
+    table_top_cited_colombia_led(pubs, authors)
     table_journals(pubs)
     table_summary(pubs, authors)
 
