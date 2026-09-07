@@ -424,7 +424,7 @@ def fig_top_institutions_small_teams(
     return counts
 
 
-def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:
+def _top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int) -> pd.DataFrame:
     colombian = authors[
         authors["is_colombian"] & (authors["institution"] != "Other Colombian institution")
     ]
@@ -444,9 +444,32 @@ def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) 
         "n_authors",
         "colombian_institutions",
     ]
-    table = top[cols]
+    return top[cols]
+
+
+def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:
+    table = _top_cited(pubs, authors, top_n)
     table.to_csv(TABLE_DIR / "table4_top_cited.csv", index=False)
     _write_markdown(table, TABLE_DIR / "table4_top_cited.md", "Top 10 most-cited articles")
+    return table
+
+
+def table_top_cited_small_teams(
+    pubs: pd.DataFrame, authors: pd.DataFrame, max_authors: int = 30, top_n: int = 10
+) -> pd.DataFrame:
+    """Most-cited papers once the large international collaborations are out.
+
+    Table 4 is nine-tenths DESI and LIGO/Virgo/KAGRA; this view shows which
+    Colombia-led papers draw the most citations on their own.
+    """
+    small = pubs[pubs["n_authors"] <= max_authors]
+    table = _top_cited(small, authors, top_n)
+    table.to_csv(TABLE_DIR / "table6_top_cited_small_teams.csv", index=False)
+    _write_markdown(
+        table,
+        TABLE_DIR / "table6_top_cited_small_teams.md",
+        f"Top {top_n} most-cited articles, publications with <= {max_authors} authors",
+    )
     return table
 
 
@@ -555,6 +578,7 @@ def main() -> None:
     table_institutions_small_teams(authors, pubs)
     table_top_authors(authors, pubs)
     table_top_cited(pubs, authors)
+    table_top_cited_small_teams(pubs, authors)
     table_journals(pubs)
     table_summary(pubs, authors)
 

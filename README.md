@@ -150,8 +150,8 @@ genuinely different name spellings.
 
 **Tables** (`output/tables/`): `table1_institutions` (adds total citations and
 h-index per institution), `table2_top_authors`, `table3_journals`,
-`table4_top_cited` (top 10 most-cited articles), `table5_institutions_small_teams`
-— all CSV + Markdown — plus `summary_stats.md`.
+`table4_top_cited` (top 10 most-cited articles), `table5_institutions_small_teams`,
+`table6_top_cited_small_teams` — all CSV + Markdown — plus `summary_stats.md`.
 
 `fig11` / `table5` re-rank institutions counting only publications with at most
 30 authors (480 of 723 records, 66% of the papers but 32% of the citations).
@@ -160,7 +160,10 @@ Pierre Auger — one Colombian coauthor on a 3,000-author paper contributes a fu
 publication and its full citation count — and the restricted view separates the
 two. It changes the head of the ranking substantially: Universidad de los Andes
 falls from 298 to 106 publications while Universidad Nacional goes from 99 to
-97, turning a three-to-one lead into a near three-way tie.
+97, turning a three-to-one lead into a near three-way tie. `table6` applies the
+same cut to the most-cited list: only one of Table 4's ten papers survives it
+(*Tracing the cosmic web*, at exactly 30 authors), and the top entry drops from
+4,140 citations to 364.
 
 As of the current data snapshot: 723 publications (1980–2026; the sole 2027
 in-press record is excluded, see Known limitations), spanning 56 journals,
