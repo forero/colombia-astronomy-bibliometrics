@@ -205,27 +205,34 @@ def fig_citations_vs_authors(pubs: pd.DataFrame) -> float:
     return pearson_r
 
 
-def fig_top_institutions(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
-    colombian = authors[authors["is_colombian"]]
-    counts = (
-        colombian[colombian["institution"] != "Other Colombian institution"]
-        .groupby("institution")["bibcode"]
-        .nunique()
-        .sort_values(ascending=False)
-    )
-    top = counts.head(top_n)
+def _plot_institution_ranking(table: pd.DataFrame, path: Path, title: str, color: str) -> None:
+    """Horizontal bars of h-index in ranking order (h, then pubs, then citations).
 
+    The bar length is the h-index because that is the primary sort key; the
+    publication count is annotated on each bar so the second key stays visible.
+    """
     fig, ax = plt.subplots(figsize=(8, 7))
-    ax.barh(top.index[::-1], top.to_numpy()[::-1], color="#1f5aa6")
-    # This ranking spans ~2 orders of magnitude (Uniandes vs. the smallest
-    # entrant), so a linear axis flattens everything below the top few bars.
-    ax.set_xscale("log")
-    ax.set_xlabel("Publications (log scale)")
-    ax.set_title(f"Top {top_n} Colombian institutions by publication count")
+    rows = table[::-1]
+    ax.barh(rows["Institution"], rows["h_index"], color=color)
+    for y, (h, n) in enumerate(zip(rows["h_index"], rows["n_publications"])):
+        ax.text(h + 0.4, y, f"{n} pubs.", va="center", fontsize=8, color="#555555")
+    ax.set_xlim(0, table["h_index"].max() * 1.18)
+    ax.set_xlabel("h-index")
+    ax.set_title(title)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig4_top_institutions.png", bbox_inches="tight")
+    fig.savefig(path, bbox_inches="tight")
     plt.close(fig)
-    return counts
+
+
+def fig_top_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
+    table = _institution_stats(authors, pubs, top_n)
+    _plot_institution_ranking(
+        table,
+        FIG_DIR / "fig4_top_institutions.png",
+        f"Top {top_n} Colombian institutions by h-index",
+        "#1f5aa6",
+    )
+    return table
 
 
 def fig_top_authors(authors: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
@@ -335,8 +342,15 @@ def fig_coauthorship_network(authors: pd.DataFrame, min_pubs: int = 5) -> None:
 # ---------------------------------------------------------------------------
 
 
+# Institution rankings are ordered by h-index first, since it is the least
+# gameable of the three by a single large-collaboration paper, with publication
+# count and then total citations as tie-breakers. Table columns follow the same
+# order so the ranking key is readable left to right.
+INSTITUTION_RANK_KEYS = ["h_index", "n_publications", "total_citations"]
+
+
 def _institution_stats(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int) -> pd.DataFrame:
-    """Per-institution publication, author and citation stats, ranked by pubs."""
+    """Per-institution stats, ranked by h-index, then publications, then citations."""
     colombian = authors[
         authors["is_colombian"] & (authors["institution"] != "Other Colombian institution")
     ]
@@ -358,10 +372,14 @@ def _institution_stats(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int) ->
     table = (
         grouped.join(years)
         .join(citation_stats)
-        .sort_values("n_publications", ascending=False)
+        .sort_values(INSTITUTION_RANK_KEYS, ascending=False)
         .head(top_n)
+        .reset_index()
+        .rename(columns={"institution": "Institution"})
     )
-    return table.reset_index().rename(columns={"institution": "Institution"})
+    return table[
+        ["Institution", *INSTITUTION_RANK_KEYS, "n_unique_authors", "first_year", "last_year"]
+    ]
 
 
 def table_institutions(authors: pd.DataFrame, pubs: pd.DataFrame, top_n: int = 25) -> pd.DataFrame:
@@ -421,30 +439,16 @@ def fig_top_institutions_colombia_led(
 ) -> pd.DataFrame:
     """Fig. 4's ranking over Colombia-led publications only."""
     led = colombia_led(pubs)
-    colombian = authors[
-        authors["is_colombian"]
-        & (authors["institution"] != "Other Colombian institution")
-        & authors["bibcode"].isin(set(led["bibcode"]))
-    ]
-    counts = (
-        colombian.groupby("institution")["bibcode"]
-        .nunique()
-        .sort_values(ascending=False)
+    led_authors = authors[authors["bibcode"].isin(set(led["bibcode"]))]
+    table = _institution_stats(led_authors, led, top_n)
+    _plot_institution_ranking(
+        table,
+        FIG_DIR / "fig11_top_institutions_colombia_led.png",
+        f"Top {top_n} Colombian institutions by h-index, papers "
+        f"\u2265{COLOMBIA_LED_MIN_SHARE:.0%} Colombian-authored",
+        "#a6541f",
     )
-    top = counts.head(top_n)
-
-    fig, ax = plt.subplots(figsize=(8, 7))
-    ax.barh(top.index[::-1], top.to_numpy()[::-1], color="#a6541f")
-    ax.set_xscale("log")
-    ax.set_xlabel("Publications (log scale)")
-    ax.set_title(
-        f"Top {top_n} Colombian institutions, papers "
-        f"\u2265{COLOMBIA_LED_MIN_SHARE:.0%} Colombian-authored"
-    )
-    fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig11_top_institutions_colombia_led.png", bbox_inches="tight")
-    plt.close(fig)
-    return counts
+    return table
 
 
 def _top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int) -> pd.DataFrame:
@@ -590,7 +594,7 @@ def main() -> None:
     fig_authors_distribution(pubs)
     fig_citations_per_year(pubs)
     fig_citations_vs_authors(pubs)
-    fig_top_institutions(authors)
+    fig_top_institutions(authors, pubs)
     fig_top_authors(authors)
     fig_top_journals(pubs)
     fig_top_keywords(pubs)

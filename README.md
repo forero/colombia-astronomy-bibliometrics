@@ -139,7 +139,7 @@ genuinely different name spellings.
 1. `fig1_publications_over_time.png`: cumulative and per-year publication counts (log scale)
 2. `fig2_avg_authors_per_year.png`: mean/median authors per publication by year
 3. `fig3_authors_distribution.png`: log-log histogram of authorship size
-4. `fig4_top_institutions.png`: top 20 Colombian institutions by publication count
+4. `fig4_top_institutions.png`: top 20 Colombian institutions by h-index, with publication counts annotated
 5. `fig5_top_authors.png`: top 20 Colombian-affiliated authors by publication count
 6. `fig6_top_journals.png`: top 15 journals
 7. `fig7_top_keywords.png`: top 25 keywords
@@ -152,6 +152,13 @@ genuinely different name spellings.
 h-index per institution), `table2_top_authors`, `table3_journals`,
 `table4_top_cited` (top 10 most-cited articles), `table5_institutions_colombia_led`,
 `table6_top_cited_colombia_led`, all CSV + Markdown, plus `summary_stats.md`.
+
+Both institution rankings (`table1`, `table5`, and the two figures) are ordered
+by h-index, then publication count, then total citations, and the table columns
+follow that same order. The h-index leads because it is the least sensitive of
+the three to a single large-collaboration paper: one publication with 4,000
+citations moves an institution's citation total by an order of magnitude but its
+h-index by at most one.
 
 `fig11` / `table5` re-rank institutions over Colombia-led publications only,
 defined as those where Colombian-affiliated authors are at least 10% of the
