@@ -481,6 +481,36 @@ def table_top_cited(pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10) 
     return table
 
 
+def table_top_citation_rate(
+    pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10
+) -> pd.DataFrame:
+    """Most-cited-per-year articles.
+
+    Table 4 ranks on raw citation totals, which favours older papers simply
+    because they have had longer to accumulate. Dividing by the paper's age is
+    a crude age control (see the caveat on Fig. 10: it is a snapshot divided by
+    years, not an observed citation-rate curve), but it surfaces recent work
+    that the raw ranking buries.
+    """
+    df = pubs.dropna(subset=["num_citations", "year"]).copy()
+    years_since_pub = (CURRENT_YEAR - df["year"] + 1).clip(lower=1)
+    df["citations_per_year"] = (df["num_citations"] / years_since_pub).round(1)
+
+    top = df.sort_values("citations_per_year", ascending=False).head(top_n)
+    table = _top_cited(top, authors, top_n).merge(
+        df[["bibcode", "citations_per_year"]], on="bibcode"
+    )
+    # Put the ranking key next to the citation total it is derived from.
+    cols = table.columns.tolist()
+    cols.insert(cols.index("num_citations") + 1, cols.pop(cols.index("citations_per_year")))
+    table = table[cols].sort_values("citations_per_year", ascending=False)
+    table.to_csv(TABLE_DIR / "table7_top_citation_rate.csv", index=False)
+    _write_markdown(
+        table, TABLE_DIR / "table7_top_citation_rate.md", "Top 10 articles by citations per year"
+    )
+    return table
+
+
 def table_top_cited_colombia_led(
     pubs: pd.DataFrame, authors: pd.DataFrame, top_n: int = 10
 ) -> pd.DataFrame:
@@ -606,6 +636,7 @@ def main() -> None:
     table_top_authors(authors, pubs)
     table_top_cited(pubs, authors)
     table_top_cited_colombia_led(pubs, authors)
+    table_top_citation_rate(pubs, authors)
     table_journals(pubs)
     table_summary(pubs, authors)
 

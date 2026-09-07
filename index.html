@@ -524,7 +524,7 @@
     <p>Esta nota actualiza las tendencias institucionales y de autor&iacute;a reportadas en Forero&#8209;Romero (2024) usando una exportaci&oacute;n reciente de NASA ADS, pero es un instrumento m&aacute;s limitado que aquel art&iacute;culo, construido sin Web of Science y sin un registro controlado de autores. Cinco limitaciones acotan cada figura y tabla a continuaci&oacute;n.</p>
     <ol class="caveat-list">
       <li><span class="num">01</span><span>No existe un identificador de autor (ORCID) en esta exportaci&oacute;n. Las variantes de nombre (&ldquo;J. E.&rdquo; frente a &ldquo;Jaime E.&rdquo;, divisiones inconsistentes de apellidos compuestos, errores tipogr&aacute;ficos ocasionales en los metadatos) se fusionan mediante una heur&iacute;stica conservadora de apellido&#43;iniciales. A&uacute;n as&iacute;, puede separar o fusionar err&oacute;neamente a un pu&ntilde;ado de personas.</span></li>
-      <li><span class="num">02</span><span>La plantilla de exportaci&oacute;n de ADS trunca las listas de autores en 200, lo que afect&oacute; a los 50 art&iacute;culos de las grandes colaboraciones internacionales (DESI, LIGO/Virgo/KAGRA, Pierre Auger). Esas listas <strong style="color:inherit">se recuperaron completas por la API de ADS</strong> y las cifras de aqu&iacute; ya reflejan el n&uacute;mero real de autores, hasta 3.677 en un solo art&iacute;culo. En consecuencia, el promedio de autores por publicaci&oacute;n y las cifras de coautor&iacute;a est&aacute;n dominados por esos art&iacute;culos: la mediana (6 autores) describe mucho mejor al art&iacute;culo t&iacute;pico que el promedio (90).</span></li>
+      <li><span class="num">02</span><span>El promedio de autores por publicaci&oacute;n est&aacute; dominado por un pu&ntilde;ado de grandes colaboraciones internacionales, que aportan listas de cientos o miles de firmantes. La mediana (6 autores) describe mucho mejor al art&iacute;culo t&iacute;pico que el promedio (90), y cualquier cifra de coautor&iacute;a debe leerse con eso en mente.</span></li>
       <li><span class="num">03</span><span>La atribuci&oacute;n institucional es una coincidencia de subcadenas contra textos libres de afiliaci&oacute;n, no una consulta controlada ROR/GRID. Cerca del 3&#37; de las afiliaciones que mencionan a Colombia caen en una categor&iacute;a &ldquo;otra&rdquo; sin clasificar, en vez de una instituci&oacute;n identificada.</span></li>
       <li><span class="num">04</span><span>Los conteos de citas son una &uacute;nica instant&aacute;nea de ADS, no una serie temporal. &ldquo;Citas por a&ntilde;o&rdquo; m&aacute;s abajo es el total de citas dividido por la edad del art&iacute;culo: un indicador aproximado del impacto, no una curva de tasa de citaci&oacute;n observada.</span></li>
       <li><span class="num">05</span><span>Se excluye en todo el an&aacute;lisis un &uacute;nico registro de 2027 en prensa, por ser un grupo demasiado escaso para interpretar.</span></li>
@@ -571,7 +571,7 @@
       <span class="chapter-num">3</span>
       <h2>Tama&ntilde;o de Colaboraci&oacute;n</h2>
     </div>
-    <p>El n&uacute;mero promedio de autores por art&iacute;culo se mantuvo bajo y estable, t&iacute;picamente por debajo de diez, hasta 2016, cuando aumenta bruscamente. Ese cambio se explica casi por completo por un pu&ntilde;ado de grupos colombianos que se unieron a grandes colaboraciones internacionales: DESI, a la que est&aacute; vinculado el Observatorio Astron&oacute;mico de la Universidad de los Andes; LIGO/Virgo/KAGRA; y el Observatorio Pierre Auger. Con las listas de autores ya recuperadas completas (limitaci&oacute;n 02), el salto es a&uacute;n m&aacute;s pronunciado: unos pocos art&iacute;culos con miles de autores arrastran el promedio anual muy por encima de lo que produce cualquier grupo colombiano por s&iacute; solo. La mediana, mucho m&aacute;s estable, es la l&iacute;nea a mirar para el art&iacute;culo t&iacute;pico.</p>
+    <p>El n&uacute;mero promedio de autores por art&iacute;culo se mantuvo bajo y estable, t&iacute;picamente por debajo de diez, hasta 2016, cuando aumenta bruscamente. Ese cambio se explica casi por completo por un pu&ntilde;ado de grupos colombianos que se unieron a grandes colaboraciones internacionales: DESI, a la que est&aacute; vinculado el Observatorio Astron&oacute;mico de la Universidad de los Andes; LIGO/Virgo/KAGRA; y el Observatorio Pierre Auger. Unos pocos art&iacute;culos con miles de autores arrastran el promedio anual muy por encima de lo que produce cualquier grupo colombiano por s&iacute; solo (limitaci&oacute;n 02). La mediana, mucho m&aacute;s estable, es la l&iacute;nea a mirar para el art&iacute;culo t&iacute;pico.</p>
     <div class="fig-row">
       <figure>
         <div class="figure-card"><img src="output/figures/fig2_avg_authors_per_year.png" alt="Autores promedio y mediana por publicaci&oacute;n y a&ntilde;o, bajos y estables antes de 2016 y luego en aumento marcado."></div>
@@ -597,7 +597,7 @@
     <p>La tasa de citaci&oacute;n (citas divididas por los a&ntilde;os transcurridos desde la publicaci&oacute;n, un control aproximado de la edad del art&iacute;culo) correlaciona con el tama&ntilde;o de colaboraci&oacute;n con un coeficiente de Pearson <em>r</em>&nbsp;=&nbsp;0,63 en espacio log&ndash;log: las listas de autores m&aacute;s grandes tienden a estar en art&iacute;culos m&aacute;s citados, lo cual no sorprende dado que varias de las mayores colaboraciones (DESI, LIGO) est&aacute;n tambi&eacute;n entre los campos m&aacute;s citados del conjunto de datos.</p>
     <figure>
       <div class="figure-card"><img src="output/figures/fig10_citations_vs_authors.png" alt="Diagrama de dispersi&oacute;n de la tasa de citaci&oacute;n frente al n&uacute;mero de autores por publicaci&oacute;n, con histogramas marginales, mostrando una correlaci&oacute;n positiva log-log."></div>
-      <figcaption><strong>Fig. 5</strong>: Tasa de citaci&oacute;n frente a tama&ntilde;o de colaboraci&oacute;n, con distribuciones marginales. Los tama&ntilde;os de colaboraci&oacute;n son los reales, tras recuperar por la API de ADS las listas que la exportaci&oacute;n truncaba en 200 (limitaci&oacute;n 02).</figcaption>
+      <figcaption><strong>Fig. 5</strong>: Tasa de citaci&oacute;n frente a tama&ntilde;o de colaboraci&oacute;n, con distribuciones marginales. El eje horizontal abarca desde art&iacute;culos de un solo autor hasta uno de 3.677.</figcaption>
     </figure>
   </section>
 
@@ -676,7 +676,29 @@
         </tbody>
       </table>
     </div>
-    <p class="tight">Los conteos de autores son los reales, recuperados por la API de ADS para los 50 registros que la exportaci&oacute;n truncaba en 200 (limitaci&oacute;n 02). De estos diez, uno solo supera los mil autores: el descubrimiento multimensajero de 2017, con 3.677. Otros tres pasan de doscientos, y el m&aacute;s peque&ntilde;o de la lista tiene 30.</p>
+    <p class="tight">De estos diez, uno solo supera los mil autores: el descubrimiento multimensajero de 2017, con 3.677. Otros tres pasan de doscientos, y el m&aacute;s peque&ntilde;o de la lista tiene 30.</p>
+    <p>Una clasificaci&oacute;n por citas totales favorece a los art&iacute;culos antiguos, que simplemente han tenido m&aacute;s a&ntilde;os para acumularlas. Dividir por la edad del art&iacute;culo corrige esa asimetr&iacute;a y saca a la superficie trabajo reciente que la lista anterior entierra. La correcci&oacute;n es burda, seg&uacute;n la limitaci&oacute;n 04: es una instant&aacute;nea de citas dividida por a&ntilde;os, no una curva de citaci&oacute;n observada, y castiga poco a los art&iacute;culos de 2025 y 2026, cuyo denominador es 1 o 2. Convienen leerse las dos tablas juntas.</p>
+    <div class="table-wrap">
+      <table>
+        <caption>Tabla 3: Los 10 art&iacute;culos con mayor tasa de citaci&oacute;n</caption>
+        <thead>
+          <tr><th class="wrap">T&iacute;tulo</th><th class="num">A&ntilde;o</th><th class="num">Citas/a&ntilde;o</th><th class="num">Citas</th><th class="num">Autores</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="wrap">DESI 2024 VI: cosmological constraints from baryon acoustic oscillations</td><td class="num">2025</td><td class="num">883,0</td><td class="num">1.766</td><td class="num">202</td></tr>
+          <tr><td class="wrap">Data Release 1 of the Dark Energy Spectroscopic Instrument</td><td class="num">2026</td><td class="num">520,0</td><td class="num">520</td><td class="num">309</td></tr>
+          <tr><td class="wrap">Multi-messenger Observations of a Binary Neutron Star Merger</td><td class="num">2017</td><td class="num">414,0</td><td class="num">4.140</td><td class="num">3.677</td></tr>
+          <tr><td class="wrap">GWTC-4.0: Population Properties of Merging Compact Binaries</td><td class="num">2026</td><td class="num">335,0</td><td class="num">335</td><td class="num">1.808</td></tr>
+          <tr><td class="wrap">DESI 2024 III: baryon acoustic oscillations from galaxies and quasars</td><td class="num">2025</td><td class="num">272,0</td><td class="num">544</td><td class="num">198</td></tr>
+          <tr><td class="wrap">DESI 2024 IV: Baryon Acoustic Oscillations from the Lyman-&alpha; forest</td><td class="num">2025</td><td class="num">190,0</td><td class="num">380</td><td class="num">199</td></tr>
+          <tr><td class="wrap">DESI 2024 VII: cosmological constraints from the full-shape modeling of clustering measurements</td><td class="num">2025</td><td class="num">164,5</td><td class="num">329</td><td class="num">213</td></tr>
+          <tr><td class="wrap">GW231123: A Binary Black Hole Merger with Total Mass 190&ndash;265 M<sub>&#9737;</sub></td><td class="num">2025</td><td class="num">128,0</td><td class="num">256</td><td class="num">1.771</td></tr>
+          <tr><td class="wrap">Overview of the Instrumentation for the Dark Energy Spectroscopic Instrument</td><td class="num">2022</td><td class="num">118,2</td><td class="num">591</td><td class="num">270</td></tr>
+          <tr><td class="wrap">The NANOGrav 15 yr Data Set: Constraints on SMBH Binaries from the GW Background</td><td class="num">2023</td><td class="num">116,8</td><td class="num">467</td><td class="num">115</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tight">Siete de los diez art&iacute;culos aparecen en las dos tablas, se&ntilde;al de que en este conjunto el impacto y la antig&uuml;edad no compiten tanto como cabr&iacute;a esperar. Los tres que entran solo por tasa de citaci&oacute;n son muy recientes: el cat&aacute;logo de ondas gravitacionales GWTC-4.0 (2026), DESI 2024 VII y la fusi&oacute;n de agujeros negros GW231123 (ambos de 2025). Salen, en cambio, tres trabajos de 2018 a 2023 que acumularon sus citas m&aacute;s despacio. Que el descubrimiento de 2017 siga tercero por tasa nueve a&ntilde;os despu&eacute;s da una idea de su magnitud.</p>
   </section>
 
   <section class="chapter" id="colombia-led">
@@ -693,7 +715,7 @@
     </figure>
     <div class="table-wrap">
       <table>
-        <caption>Tabla 3: Las 10 principales instituciones en publicaciones con &#8805;10&#37; de autores colombianos, por &Iacute;ndice-H</caption>
+        <caption>Tabla 4: Las 10 principales instituciones en publicaciones con &#8805;10&#37; de autores colombianos, por &Iacute;ndice-H</caption>
         <thead>
           <tr><th class="wrap">Instituci&oacute;n</th><th class="num">&Iacute;ndice-H</th><th class="num">Pubs.</th><th class="num">Citas</th><th class="num">Autores</th><th class="num">&Iacute;ndice-H en Tabla 1</th></tr>
         </thead>
@@ -711,12 +733,12 @@
         </tbody>
       </table>
     </div>
-    <p>El orden de la cabeza apenas cambia, pero las distancias se disuelven. La Universidad de los Andes sigue primera, y pasa de un &Iacute;ndice-H de 47 a uno de 22, y de 298 a 90 publicaciones: cerca del 70&#37; de su producci&oacute;n registrada proviene de art&iacute;culos de grandes colaboraciones internacionales, y de manera casi exclusiva de DESI, a la que est&aacute; vinculado el Observatorio Astron&oacute;mico de la Universidad de los Andes. La Universidad Nacional de Colombia, en cambio, apenas baja de 20 a 19 y de 99 a 95 publicaciones, porque su recuento es casi enteramente trabajo con participaci&oacute;n colombiana mayoritaria: es la instituci&oacute;n con m&aacute;s publicaciones de la Tabla 3, aunque no la de mayor &Iacute;ndice-H. Lo que en la Tabla 1 era una ventaja de m&aacute;s de dos a uno en &Iacute;ndice-H se convierte aqu&iacute; en un empate t&eacute;cnico entre tres instituciones: 22, 21 y 19.</p>
-    <p>Las citas se reordenan a&uacute;n m&aacute;s: los Andes pasan de 12.603 a 1.615 y la UIS de 6.723 a 914, mientras que la Nacional apenas baja de 1.357 a 1.288. Dicho de otro modo, la mayor parte de la ventaja en citas de las dos primeras instituciones proviene de art&iacute;culos de consorcio con cientos o miles de coautores, donde la contribuci&oacute;n colombiana es una fracci&oacute;n del total. La Universidad de Medell&iacute;n es el caso extremo: su &Iacute;ndice-H cae de 18 a 5, porque 19 de sus 24 publicaciones son art&iacute;culos de consorcio. Ninguna de las dos lecturas es la correcta por s&iacute; sola: la Tabla 1 mide participaci&oacute;n en la astronom&iacute;a mundial y la Tabla 3 mide capacidad de investigaci&oacute;n propia, y la diferencia entre ambas es en s&iacute; misma el hallazgo.</p>
+    <p>El orden de la cabeza apenas cambia, pero las distancias se disuelven. La Universidad de los Andes sigue primera, y pasa de un &Iacute;ndice-H de 47 a uno de 22, y de 298 a 90 publicaciones: cerca del 70&#37; de su producci&oacute;n registrada proviene de art&iacute;culos de grandes colaboraciones internacionales, y de manera casi exclusiva de DESI, a la que est&aacute; vinculado el Observatorio Astron&oacute;mico de la Universidad de los Andes. La Universidad Nacional de Colombia, en cambio, apenas baja de 20 a 19 y de 99 a 95 publicaciones, porque su recuento es casi enteramente trabajo con participaci&oacute;n colombiana mayoritaria: es la instituci&oacute;n con m&aacute;s publicaciones de la Tabla 4, aunque no la de mayor &Iacute;ndice-H. Lo que en la Tabla 1 era una ventaja de m&aacute;s de dos a uno en &Iacute;ndice-H se convierte aqu&iacute; en un empate t&eacute;cnico entre tres instituciones: 22, 21 y 19.</p>
+    <p>Las citas se reordenan a&uacute;n m&aacute;s: los Andes pasan de 12.603 a 1.615 y la UIS de 6.723 a 914, mientras que la Nacional apenas baja de 1.357 a 1.288. Dicho de otro modo, la mayor parte de la ventaja en citas de las dos primeras instituciones proviene de art&iacute;culos de consorcio con cientos o miles de coautores, donde la contribuci&oacute;n colombiana es una fracci&oacute;n del total. La Universidad de Medell&iacute;n es el caso extremo: su &Iacute;ndice-H cae de 18 a 5, porque 19 de sus 24 publicaciones son art&iacute;culos de consorcio. Ninguna de las dos lecturas es la correcta por s&iacute; sola: la Tabla 1 mide participaci&oacute;n en la astronom&iacute;a mundial y la Tabla 4 mide capacidad de investigaci&oacute;n propia, y la diferencia entre ambas es en s&iacute; misma el hallazgo.</p>
     <p>El mismo criterio aplicado a los trabajos m&aacute;s citados cambia la lista por completo: ninguno de los diez art&iacute;culos de la Tabla 2 sobrevive al filtro. Lo que aparece en su lugar son art&iacute;culos de grupos peque&ntilde;os, de entre tres y catorce autores, en poblaciones estelares y c&uacute;mulos j&oacute;venes, astrof&iacute;sica relativista, red c&oacute;smica y f&iacute;sica solar.</p>
     <div class="table-wrap">
       <table>
-        <caption>Tabla 4: Los 10 art&iacute;culos m&aacute;s citados con &#8805;10&#37; de autores colombianos</caption>
+        <caption>Tabla 5: Los 10 art&iacute;culos m&aacute;s citados con &#8805;10&#37; de autores colombianos</caption>
         <thead>
           <tr><th class="wrap">T&iacute;tulo</th><th class="num">A&ntilde;o</th><th class="num">Citas</th><th class="num">Autores</th><th class="wrap">Instituci&oacute;n colombiana</th></tr>
         </thead>

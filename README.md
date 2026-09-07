@@ -151,7 +151,8 @@ genuinely different name spellings.
 **Tables** (`output/tables/`): `table1_institutions` (adds total citations and
 h-index per institution), `table2_top_authors`, `table3_journals`,
 `table4_top_cited` (top 10 most-cited articles), `table5_institutions_colombia_led`,
-`table6_top_cited_colombia_led`, all CSV + Markdown, plus `summary_stats.md`.
+`table6_top_cited_colombia_led`, `table7_top_citation_rate` (top 10 by citations
+divided by paper age), all CSV + Markdown, plus `summary_stats.md`.
 
 Both institution rankings (`table1`, `table5`, and the two figures) are ordered
 by h-index, then publication count, then total citations, and the table columns
