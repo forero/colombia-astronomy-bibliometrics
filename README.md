@@ -11,16 +11,16 @@ Forero-Romero (2024), *"Astronomy in Colombia: a bibliometric perspective"*
 `data/raw/` holds two pairs of ADS exports, both for the same underlying
 query/result set:
 
-- `export-ads.txt` / `export-ads-1.txt` — the tagged `%R/%T/%A/...` custom
+- `export-ads.txt` / `export-ads-1.txt`: the tagged `%R/%T/%A/...` custom
   format, concatenated into `data/raw/combined_ads_export.txt` (724 unique
   records, no overlapping bibcodes between the two files). Carries bibcode,
   title, authors, per-author affiliations, journal, volume, date, page,
   keywords, abstract, publisher, URL, DOI, and arXiv id.
-- `export-custom.txt` / `export-custom-1.txt` — a second ADS export template,
+- `export-custom.txt` / `export-custom-1.txt`: a second ADS export template,
   same 724 records in the same order, adding a `num_citations` column that
   the tagged format doesn't carry. It has no bibcode, so citation counts are
   matched back onto the tagged records purely by row position (verified by
-  comparing titles at each index — 718/724 match exactly, the rest differ
+  comparing titles at each index; 718/724 match exactly, the rest differ
   only in markup/quoting). See `src/parse_citations.py`.
 
 ## Pipeline
@@ -62,7 +62,7 @@ python3 src/plots.py               # -> output/figures/*.png, output/tables/*
 <https://ui.adsabs.harvard.edu/user/settings/token>. It caches every API
 response in `data/raw/ads_full_authors.json`, so with that file committed a
 re-run is a no-op offline for the records already fetched. It **must** run
-after `build_dataset.py` — that script rewrites the processed CSVs from the raw
+after `build_dataset.py`, because that script rewrites the processed CSVs from the raw
 exports and so reintroduces the truncation.
 
 ## Institution matching
@@ -85,7 +85,7 @@ that a Colombian group also belongs to.
 ## Author name matching
 
 There's no author-id (ORCID) in this export, and the same person shows up
-under several ADS name-string variants across records — different levels of
+under several ADS name-string variants across records: different levels of
 given-name detail ("Forero-Romero, J. E." vs. "Forero-Romero, Jaime E."),
 occasional metadata typos ("Jamie E." for "Jaime E."), and inconsistent
 compound-surname splits ("Enea Romano, Antonio" vs. "Romano, Antonio Enea").
@@ -102,7 +102,7 @@ genuinely different name spellings.
 ## Known limitations
 
 - **2027 is excluded from all analysis.** At the time of writing there is a
-  single in-press 2027 record (already assigned a bibcode) — too sparse a
+  single in-press 2027 record (already assigned a bibcode), too sparse a
   bucket to be meaningful in year-based trends, and it would otherwise show
   up as a one-off drop in every time series. `build_dataset.py` drops it
   before writing `publications.csv`/`authorships.csv`.
@@ -112,7 +112,7 @@ genuinely different name spellings.
   as universities.
 - **Author lists truncated at 200 have been repaired via the ADS API.** This
   export template caps author lists at 200, which affected the 50 huge
-  collaboration papers in the sample (DESI, LIGO/Virgo/KAGRA, Pierre Auger —
+  collaboration papers in the sample (DESI, LIGO/Virgo/KAGRA, Pierre Auger;
   several have thousands of real authors). `src/fetch_full_authors.py` refetches
   the full author/affiliation lists for those bibcodes and rewrites the
   affected rows of the processed CSVs; responses are cached in
@@ -136,28 +136,28 @@ genuinely different name spellings.
 ## Outputs
 
 **Figures** (`output/figures/`):
-1. `fig1_publications_over_time.png` — cumulative and per-year publication counts (log scale)
-2. `fig2_avg_authors_per_year.png` — mean/median authors per publication by year
-3. `fig3_authors_distribution.png` — log-log histogram of authorship size
-4. `fig4_top_institutions.png` — top 20 Colombian institutions by publication count
-5. `fig5_top_authors.png` — top 20 Colombian-affiliated authors by publication count
-6. `fig6_top_journals.png` — top 15 journals
-7. `fig7_top_keywords.png` — top 25 keywords
-8. `fig8_coauthorship_network.png` — co-authorship network among Colombian-affiliated authors with ≥5 publications
-9. `fig9_citations_per_year.png` — total and mean citations by publication year
-10. `fig10_citations_vs_authors.png` — citation rate vs. collaboration size, with marginal histograms and Pearson r
-11. `fig11_top_institutions_small_teams.png` — the Fig. 4 ranking restricted to publications with ≤30 authors
+1. `fig1_publications_over_time.png`: cumulative and per-year publication counts (log scale)
+2. `fig2_avg_authors_per_year.png`: mean/median authors per publication by year
+3. `fig3_authors_distribution.png`: log-log histogram of authorship size
+4. `fig4_top_institutions.png`: top 20 Colombian institutions by publication count
+5. `fig5_top_authors.png`: top 20 Colombian-affiliated authors by publication count
+6. `fig6_top_journals.png`: top 15 journals
+7. `fig7_top_keywords.png`: top 25 keywords
+8. `fig8_coauthorship_network.png`: co-authorship network among Colombian-affiliated authors with ≥5 publications
+9. `fig9_citations_per_year.png`: total and mean citations by publication year
+10. `fig10_citations_vs_authors.png`: citation rate vs. collaboration size, with marginal histograms and Pearson r
+11. `fig11_top_institutions_small_teams.png`: the Fig. 4 ranking restricted to publications with ≤30 authors
 
 **Tables** (`output/tables/`): `table1_institutions` (adds total citations and
 h-index per institution), `table2_top_authors`, `table3_journals`,
 `table4_top_cited` (top 10 most-cited articles), `table5_institutions_small_teams`,
-`table6_top_cited_small_teams` — all CSV + Markdown — plus `summary_stats.md`.
+`table6_top_cited_small_teams`, all CSV + Markdown, plus `summary_stats.md`.
 
 `fig11` / `table5` re-rank institutions counting only publications with at most
 30 authors (480 of 723 records, 66% of the papers but 32% of the citations).
 Table 1 conflates Colombia-led work with membership in DESI / LIGO-Virgo-KAGRA /
-Pierre Auger — one Colombian coauthor on a 3,000-author paper contributes a full
-publication and its full citation count — and the restricted view separates the
+Pierre Auger (one Colombian coauthor on a 3,000-author paper contributes a full
+publication and its full citation count), and the restricted view separates the
 two. It changes the head of the ranking substantially: Universidad de los Andes
 falls from 298 to 106 publications while Universidad Nacional goes from 99 to
 97, turning a three-to-one lead into a near three-way tie. `table6` applies the

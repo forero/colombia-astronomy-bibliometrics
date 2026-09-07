@@ -152,7 +152,7 @@ def fig_citations_per_year(pubs: pd.DataFrame) -> None:
     ax2.set_title("Mean citations per publication, by year")
 
     fig.suptitle(
-        f"Citations accumulated as of {CURRENT_YEAR} — older papers have had more time to be cited",
+        f"Citations accumulated as of {CURRENT_YEAR}: older papers have had more time to be cited",
         y=1.02,
         fontsize=10,
     )
@@ -322,7 +322,7 @@ def fig_coauthorship_network(authors: pd.DataFrame, min_pubs: int = 5) -> None:
     labels = {n: n.split(",")[0] for n in g.nodes}
     nx.draw_networkx_labels(g, pos, labels=labels, ax=ax, font_size=7)
     ax.set_title(
-        f"Co-authorship network — Colombian-affiliated authors with ≥{min_pubs} publications"
+        f"Co-authorship network: Colombian-affiliated authors with ≥{min_pubs} publications"
     )
     ax.axis("off")
     fig.tight_layout()
