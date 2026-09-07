@@ -96,11 +96,15 @@ genuinely different name spellings.
   lookup, and Colombian secondary schools / non-academic institutions that
   happen to add "Colombia" to their affiliation string are counted the same
   as universities.
-- **Author lists are truncated at 200** by this ADS export template for the
-  handful of huge collaboration papers (DESI, LIGO/Virgo/KAGRA, Pierre
-  Auger — several have thousands of real authors). `n_authors` for those
-  records is a floor, not the true count, which caps the right edge of
-  Fig. 2 (avg. authors/year) and Fig. 10 (citations vs. authors) at 200.
+- **Author lists truncated at 200 have been repaired via the ADS API.** This
+  export template caps author lists at 200, which affected the 50 huge
+  collaboration papers in the sample (DESI, LIGO/Virgo/KAGRA, Pierre Auger —
+  several have thousands of real authors). `src/fetch_full_authors.py` refetches
+  the full author/affiliation lists for those bibcodes and rewrites the
+  affected rows of the processed CSVs; responses are cached in
+  `data/raw/ads_full_authors.json`. Re-running `build_dataset.py` from the raw
+  exports reintroduces the truncation, so run `fetch_full_authors.py` after it
+  (it needs an ADS token in `$ADS_DEV_KEY` or `~/.ads/dev_key`).
 - **Citation counts are a single ADS snapshot** (as of the export date), not
   a per-year citation history, so "citations per year since publication" in
   Fig. 10/Table 1 is total citations divided by paper age, not an observed
@@ -128,7 +132,7 @@ h-index per institution), `table2_top_authors`, `table3_journals`,
 
 As of the current data snapshot: 723 publications (1980–2026; the sole 2027
 in-press record is excluded, see Known limitations), spanning 56 journals,
-about 380 unique authors (after name matching) with a Colombian affiliation,
+about 403 unique authors (after name matching) with a Colombian affiliation,
 26,550 total citations, and an overall h-index of 65. The most-cited paper is
 the 2017 multi-messenger neutron-star-merger discovery (GW170817), with 4,140
 citations.

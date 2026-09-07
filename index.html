@@ -524,7 +524,7 @@
     <p>Esta nota actualiza las tendencias institucionales y de autor&iacute;a reportadas en Forero&#8209;Romero (2024) usando una exportaci&oacute;n reciente de NASA ADS, pero es un instrumento m&aacute;s limitado que aquel art&iacute;culo, construido sin Web of Science y sin un registro controlado de autores. Cinco limitaciones acotan cada figura y tabla a continuaci&oacute;n.</p>
     <ol class="caveat-list">
       <li><span class="num">01</span><span>No existe un identificador de autor (ORCID) en esta exportaci&oacute;n. Las variantes de nombre &mdash; &ldquo;J. E.&rdquo; frente a &ldquo;Jaime E.&rdquo;, divisiones inconsistentes de apellidos compuestos, errores tipogr&aacute;ficos ocasionales en los metadatos &mdash; se fusionan mediante una heur&iacute;stica conservadora de apellido&#43;iniciales. A&uacute;n as&iacute;, puede separar o fusionar err&oacute;neamente a un pu&ntilde;ado de personas.</span></li>
-      <li><span class="num">02</span><span>Los art&iacute;culos de las colaboraciones m&aacute;s grandes &mdash; DESI, LIGO/Virgo/KAGRA, Pierre Auger &mdash; tienen listas de autores <strong style="color:inherit">truncadas en 200</strong> por esta plantilla de exportaci&oacute;n de ADS. Las cifras de tama&ntilde;o de autor&iacute;a y de colaboraci&oacute;n subestiman esos art&iacute;culos, en algunos casos en un orden de magnitud.</span></li>
+      <li><span class="num">02</span><span>La plantilla de exportaci&oacute;n de ADS trunca las listas de autores en 200, lo que afect&oacute; a los 50 art&iacute;culos de las mega-colaboraciones (DESI, LIGO/Virgo/KAGRA, Pierre Auger). Esas listas <strong style="color:inherit">se recuperaron completas por la API de ADS</strong> y las cifras de aqu&iacute; ya reflejan el n&uacute;mero real de autores &mdash; hasta 3.677 en un solo art&iacute;culo. En consecuencia, el promedio de autores por publicaci&oacute;n y las cifras de coautor&iacute;a est&aacute;n dominados por esos art&iacute;culos: la mediana (6 autores) describe mucho mejor al art&iacute;culo t&iacute;pico que el promedio (90).</span></li>
       <li><span class="num">03</span><span>La atribuci&oacute;n institucional es una coincidencia de subcadenas contra textos libres de afiliaci&oacute;n, no una consulta controlada ROR/GRID. Cerca del 3&#37; de las afiliaciones que mencionan a Colombia caen en una categor&iacute;a &ldquo;otra&rdquo; sin clasificar, en vez de una instituci&oacute;n identificada.</span></li>
       <li><span class="num">04</span><span>Los conteos de citas son una &uacute;nica instant&aacute;nea de ADS, no una serie temporal. &ldquo;Citas por a&ntilde;o&rdquo; m&aacute;s abajo es el total de citas dividido por la edad del art&iacute;culo &mdash; un indicador aproximado del impacto, no una curva de tasa de citaci&oacute;n observada.</span></li>
       <li><span class="num">05</span><span>Se excluye en todo el an&aacute;lisis un &uacute;nico registro de 2027 en prensa, por ser un grupo demasiado escaso para interpretar.</span></li>
@@ -534,13 +534,13 @@
 
   <div class="abstract">
     <span class="label">Resumen</span>
-    <p class="lede">Recopilamos 723 publicaciones de astronom&iacute;a y astrof&iacute;sica indexadas en el Astrophysics Data System de la NASA con al menos un autor de afiliaci&oacute;n colombiana, entre 1980 y 2026. El conjunto de registros abarca 56 revistas y, tras la fusi&oacute;n heur&iacute;stica de nombres, cerca de 380 investigadores individuales en 33 instituciones identificadas, que en conjunto acumulan m&aacute;s de 26.500 citas y un &iacute;ndice <em>h</em> global de 65. Reportamos tendencias de crecimiento, efectos del tama&ntilde;o de colaboraci&oacute;n, patrones de citaci&oacute;n, clasificaciones institucionales, y distribuciones por revista y por tema, siguiendo el enfoque descriptivo de Forero&#8209;Romero (2024) en todo lo que los datos disponibles lo permiten. Universidad de los Andes, Universidad de Antioquia, Universidad Nacional de Colombia y Universidad Industrial de Santander siguen siendo los cuatro mayores contribuyentes &mdash; consistente con el hallazgo central del estudio anterior pese a tres a&ntilde;os adicionales de datos y una base de datos fuente distinta.</p>
+    <p class="lede">Recopilamos 723 publicaciones de astronom&iacute;a y astrof&iacute;sica indexadas en el Astrophysics Data System de la NASA con al menos un autor de afiliaci&oacute;n colombiana, entre 1980 y 2026. El conjunto de registros abarca 56 revistas y, tras la fusi&oacute;n heur&iacute;stica de nombres, cerca de 403 investigadores individuales en 33 instituciones identificadas, que en conjunto acumulan m&aacute;s de 26.500 citas y un &iacute;ndice <em>h</em> global de 65. Reportamos tendencias de crecimiento, efectos del tama&ntilde;o de colaboraci&oacute;n, patrones de citaci&oacute;n, clasificaciones institucionales, y distribuciones por revista y por tema, siguiendo el enfoque descriptivo de Forero&#8209;Romero (2024) en todo lo que los datos disponibles lo permiten. Universidad de los Andes, Universidad de Antioquia, Universidad Nacional de Colombia y Universidad Industrial de Santander siguen siendo los cuatro mayores contribuyentes &mdash; consistente con el hallazgo central del estudio anterior pese a tres a&ntilde;os adicionales de datos y una base de datos fuente distinta.</p>
   </div>
 
   <div class="stat-strip">
     <div class="stat"><span class="n tabular">723</span><span class="lbl">Publicaciones, 1980&ndash;2026</span></div>
     <div class="stat"><span class="n tabular">56</span><span class="lbl">Revistas</span></div>
-    <div class="stat"><span class="n tabular">380</span><span class="lbl">Autores con afiliaci&oacute;n colombiana</span></div>
+    <div class="stat"><span class="n tabular">403</span><span class="lbl">Autores con afiliaci&oacute;n colombiana</span></div>
     <div class="stat"><span class="n tabular">33</span><span class="lbl">Instituciones identificadas</span></div>
     <div class="stat"><span class="n tabular">26.550</span><span class="lbl">Citas totales</span></div>
     <div class="stat"><span class="n tabular">65</span><span class="lbl">&Iacute;ndice <em>h</em> global</span></div>
@@ -571,7 +571,7 @@
       <span class="chapter-num">3</span>
       <h2>Tama&ntilde;o de Colaboraci&oacute;n</h2>
     </div>
-    <p>El n&uacute;mero promedio de autores por art&iacute;culo se mantuvo bajo y estable &mdash; t&iacute;picamente por debajo de diez &mdash; hasta 2016, cuando aumenta bruscamente. Ese cambio se explica casi por completo por un pu&ntilde;ado de grupos colombianos que se unieron a grandes colaboraciones internacionales: DESI, LIGO/Virgo/KAGRA y el Observatorio Pierre Auger. La limitaci&oacute;n 02 aplica directamente aqu&iacute;: como las listas de autores de esas colaboraciones est&aacute;n truncadas en 200 en esta exportaci&oacute;n, el promedio real posterior a 2016 est&aacute; subestimado, no sobreestimado.</p>
+    <p>El n&uacute;mero promedio de autores por art&iacute;culo se mantuvo bajo y estable &mdash; t&iacute;picamente por debajo de diez &mdash; hasta 2016, cuando aumenta bruscamente. Ese cambio se explica casi por completo por un pu&ntilde;ado de grupos colombianos que se unieron a grandes colaboraciones internacionales: DESI, LIGO/Virgo/KAGRA y el Observatorio Pierre Auger. Con las listas de autores ya recuperadas completas (limitaci&oacute;n 02), el salto es a&uacute;n m&aacute;s pronunciado: unos pocos art&iacute;culos con miles de autores arrastran el promedio anual muy por encima de lo que produce cualquier grupo colombiano por s&iacute; solo. La mediana, mucho m&aacute;s estable, es la l&iacute;nea a mirar para el art&iacute;culo t&iacute;pico.</p>
     <div class="fig-row">
       <figure>
         <div class="figure-card"><img src="output/figures/fig2_avg_authors_per_year.png" alt="Autores promedio y mediana por publicaci&oacute;n y a&ntilde;o, bajos y estables antes de 2016 y luego en aumento marcado."></div>
@@ -597,7 +597,7 @@
     <p>La tasa de citaci&oacute;n &mdash; citas divididas por los a&ntilde;os transcurridos desde la publicaci&oacute;n, un control aproximado de la edad del art&iacute;culo &mdash; correlaciona con el tama&ntilde;o de colaboraci&oacute;n con un coeficiente de Pearson <em>r</em>&nbsp;=&nbsp;0,63 en espacio log&ndash;log: las listas de autores m&aacute;s grandes tienden a estar en art&iacute;culos m&aacute;s citados, lo cual no sorprende dado que varias de las mayores colaboraciones (DESI, LIGO) est&aacute;n tambi&eacute;n entre los campos m&aacute;s citados del conjunto de datos.</p>
     <figure>
       <div class="figure-card"><img src="output/figures/fig10_citations_vs_authors.png" alt="Diagrama de dispersi&oacute;n de la tasa de citaci&oacute;n frente al n&uacute;mero de autores por publicaci&oacute;n, con histogramas marginales, mostrando una correlaci&oacute;n positiva log-log."></div>
-      <figcaption><strong>Fig. 5</strong> &mdash; Tasa de citaci&oacute;n frente a tama&ntilde;o de colaboraci&oacute;n, con distribuciones marginales. Los autores est&aacute;n limitados a 200 por la exportaci&oacute;n (limitaci&oacute;n 02); la correlaci&oacute;n real en los tama&ntilde;os de colaboraci&oacute;n m&aacute;s grandes no puede recuperarse a partir de estos datos.</figcaption>
+      <figcaption><strong>Fig. 5</strong> &mdash; Tasa de citaci&oacute;n frente a tama&ntilde;o de colaboraci&oacute;n, con distribuciones marginales. Los tama&ntilde;os de colaboraci&oacute;n son los reales, tras recuperar por la API de ADS las listas que la exportaci&oacute;n truncaba en 200 (limitaci&oacute;n 02).</figcaption>
     </figure>
   </section>
 
@@ -618,16 +618,16 @@
           <tr><th class="wrap">Instituci&oacute;n</th><th class="num">Pubs.</th><th class="num">Autores</th><th class="num">Citas</th><th class="num"><em>h</em></th><th class="num">Activa desde</th></tr>
         </thead>
         <tbody>
-          <tr class="row-lead"><td class="wrap">Universidad de los Andes</td><td class="num">298</td><td class="num">66</td><td class="num">12.603</td><td class="num">47</td><td class="num">1980</td></tr>
-          <tr><td class="wrap">Universidad de Antioquia</td><td class="num">99</td><td class="num">71</td><td class="num">2.098</td><td class="num">22</td><td class="num">2005</td></tr>
-          <tr><td class="wrap">Universidad Nacional de Colombia</td><td class="num">98</td><td class="num">90</td><td class="num">1.313</td><td class="num">19</td><td class="num">1980</td></tr>
-          <tr><td class="wrap">Universidad Industrial de Santander</td><td class="num">67</td><td class="num">38</td><td class="num">1.950</td><td class="num">21</td><td class="num">2006</td></tr>
+          <tr class="row-lead"><td class="wrap">Universidad de los Andes</td><td class="num">298</td><td class="num">67</td><td class="num">12.603</td><td class="num">47</td><td class="num">1980</td></tr>
+          <tr><td class="wrap">Universidad de Antioquia</td><td class="num">118</td><td class="num">75</td><td class="num">3.561</td><td class="num">29</td><td class="num">2005</td></tr>
+          <tr><td class="wrap">Universidad Nacional de Colombia</td><td class="num">99</td><td class="num">93</td><td class="num">1.357</td><td class="num">20</td><td class="num">1980</td></tr>
+          <tr><td class="wrap">Universidad Industrial de Santander</td><td class="num">84</td><td class="num">51</td><td class="num">6.723</td><td class="num">24</td><td class="num">2006</td></tr>
+          <tr><td class="wrap">Universidad de Medell&iacute;n</td><td class="num">24</td><td class="num">5</td><td class="num">943</td><td class="num">18</td><td class="num">2010</td></tr>
           <tr><td class="wrap">Universidad del Valle</td><td class="num">19</td><td class="num">16</td><td class="num">220</td><td class="num">8</td><td class="num">2012</td></tr>
           <tr><td class="wrap">Universidad Tecnol&oacute;gica de Pereira</td><td class="num">17</td><td class="num">12</td><td class="num">112</td><td class="num">5</td><td class="num">1997</td></tr>
           <tr><td class="wrap">Universidad de los Llanos</td><td class="num">14</td><td class="num">1</td><td class="num">42</td><td class="num">4</td><td class="num">2018</td></tr>
           <tr><td class="wrap">Universidad de Nari&ntilde;o</td><td class="num">12</td><td class="num">5</td><td class="num">187</td><td class="num">7</td><td class="num">2015</td></tr>
           <tr><td class="wrap">Universidad ECCI</td><td class="num">9</td><td class="num">6</td><td class="num">363</td><td class="num">5</td><td class="num">2017</td></tr>
-          <tr><td class="wrap">Universidad Tecnol&oacute;gica de Bol&iacute;var</td><td class="num">8</td><td class="num">6</td><td class="num">34</td><td class="num">3</td><td class="num">2022</td></tr>
         </tbody>
       </table>
     </div>
@@ -664,11 +664,11 @@
           <tr><th class="wrap">T&iacute;tulo</th><th class="num">A&ntilde;o</th><th class="num">Citas</th><th class="num">Autores</th></tr>
         </thead>
         <tbody>
-          <tr><td class="wrap">Multi-messenger Observations of a Binary Neutron Star Merger</td><td class="num">2017</td><td class="num">4.140</td><td class="num">200</td></tr>
-          <tr><td class="wrap">DESI 2024 VI: cosmological constraints from baryon acoustic oscillations</td><td class="num">2025</td><td class="num">1.766</td><td class="num">200</td></tr>
-          <tr><td class="wrap">Overview of the Instrumentation for the Dark Energy Spectroscopic Instrument</td><td class="num">2022</td><td class="num">591</td><td class="num">200</td></tr>
+          <tr><td class="wrap">Multi-messenger Observations of a Binary Neutron Star Merger</td><td class="num">2017</td><td class="num">4.140</td><td class="num">3.677</td></tr>
+          <tr><td class="wrap">DESI 2024 VI: cosmological constraints from baryon acoustic oscillations</td><td class="num">2025</td><td class="num">1.766</td><td class="num">202</td></tr>
+          <tr><td class="wrap">Overview of the Instrumentation for the Dark Energy Spectroscopic Instrument</td><td class="num">2022</td><td class="num">591</td><td class="num">270</td></tr>
           <tr><td class="wrap">DESI 2024 III: baryon acoustic oscillations from galaxies and quasars</td><td class="num">2025</td><td class="num">544</td><td class="num">198</td></tr>
-          <tr><td class="wrap">Data Release 1 of the Dark Energy Spectroscopic Instrument</td><td class="num">2026</td><td class="num">520</td><td class="num">200</td></tr>
+          <tr><td class="wrap">Data Release 1 of the Dark Energy Spectroscopic Instrument</td><td class="num">2026</td><td class="num">520</td><td class="num">309</td></tr>
           <tr><td class="wrap">The NANOGrav 15 yr Data Set: Constraints on SMBH Binaries from the GW Background</td><td class="num">2023</td><td class="num">467</td><td class="num">115</td></tr>
           <tr><td class="wrap">DESI 2024 IV: Baryon Acoustic Oscillations from the Lyman-&alpha; forest</td><td class="num">2025</td><td class="num">380</td><td class="num">199</td></tr>
           <tr><td class="wrap">Tracing the cosmic web</td><td class="num">2018</td><td class="num">364</td><td class="num">30</td></tr>
@@ -677,7 +677,7 @@
         </tbody>
       </table>
     </div>
-    <p class="tight">Los conteos de autores de 200 marcan el truncamiento de la exportaci&oacute;n descrito en la limitaci&oacute;n 02, no necesariamente el tama&ntilde;o real de la colaboraci&oacute;n &mdash; varios de estos art&iacute;culos tienen en realidad listas de autores del orden de los miles.</p>
+    <p class="tight">Los conteos de autores son los reales, recuperados por la API de ADS para los 50 registros que la exportaci&oacute;n truncaba en 200 (limitaci&oacute;n 02). Varios de estos art&iacute;culos muy citados tienen listas de autores del orden de los miles.</p>
   </section>
 
   <div class="availability">
